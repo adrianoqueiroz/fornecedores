@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Sistema de Controle de Fornecedores</title>
+        <link rel="stylesheet" type="text/css" href="css/index.css"/>
+    </h:head>
+    <h:body style="background-image:url('imagens/bg_site.jpg'); background-repeat: repeat-x;">
+
+
+        <br/><br/>
+        <img src="imagens/logo.png"/>
+
+        <br/><br/><br/>
+        
+        <h:form>    
+            <p:growl id="messages" showDetail="true" />
+
+            <p:toolbar>
+                <f:facet name="left">
+                    <p:commandButton type="button" value="Cadastrar" icon="ui-icon-document" />
+
+                    <p:commandButton type="button" value="Listar" icon="ui-icon-folder-open" />
+                </f:facet>
+            </p:toolbar>
+        </h:form>
+
+        <br/>
+
+        <h:form>
+            <p:panel header="Identificação">
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="empresa" value="Empresa " />
+                        </p:column>
+                        <p:column colspan="5">
+                            <p:inputText id="empresa" size="112"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="cnpj" value="CNPJ " />
+                        </p:column>
+                        <p:column>
+                            <p:inputMask id="cnpj" value="#{maskView.date}" mask="99.999.999/9999-99"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel for="inscEstadual" value="Insc. Estadual " />
+                        </p:column>
+                        <p:column>
+                            <p:inputMask id="inscEstadual" value="#{maskView.date}" mask="99.999.999/9999-99"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel for="inscMunicipal" value="Insc. Municipal " />
+                        </p:column>
+                        <p:column>
+                            <p:inputMask id="inscMunicipal" value="#{maskView.date}" mask="99.999.999/9999-99"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="categoria01" value="Categoria 01" />
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="categoria01" style="width:195px;">
+                                <f:selectItem itemLabel="Selecione..." />
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column>
+                            <p:outputLabel for="categoria02" value="Categoria 02" />
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="categoria02" style="width:195px;">
+                                <f:selectItem itemLabel="Selecione..."/>
+                            </p:selectOneMenu>
+                        </p:column>
+
+                        <p:column>
+                            <p:outputLabel for="categoria03" value="Categoria 03" />
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="categoria03" style="width:195px;">
+                                <f:selectItem itemLabel="Selecione..."/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="qualificacao" value="Qualificação" />
+                        </p:column>
+                        <p:column>
+                            <p:selectOneRadio id="qualificacao" layout="grid" columns="1">
+                                <f:selectItem itemLabel="Muito Bom" itemValue="Muito Bom" />
+                                <f:selectItem itemLabel="Bom" itemValue="Bom" />
+                                <f:selectItem itemLabel="Ruim" itemValue="Ruim" />
+                                <f:selectItem itemLabel="Péssimo" itemValue="Péssimo" />
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel for="observacao" value="Observações" />
+                        </p:column>
+                        <p:column colspan="3">
+                            <h:panelGrid>
+                                <p:inputTextarea id="observacao" rows="2" cols="65" counter="displayCounter" maxlength="150" counterTemplate="{0} Caracteres restantes." autoResize="false" />
+                                <h:outputText id="displayCounter" />
+                            </h:panelGrid>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </p:panel>
+
+            <br/>
+
+            <p:panel header="Endereço">
+                <h:panelGrid columns="6" cellpadding="5">
+                    <p:outputLabel for="estado" value="Estado" />
+                    <p:selectOneMenu id="estado" style="width:195px;">
+                        <f:selectItem itemLabel="Selecione..."/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="cidade" value="Cidade" />
+                    <p:selectOneMenu id="cidade" style="width:195px;">
+                        <f:selectItem itemLabel="Selecione..."/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="bairro" value="Bairro " />
+                    <p:inputText id="bairro" />
+
+                    <p:outputLabel for="logradouro" value="Logradouro " />
+                    <p:inputText id="logradouro" />
+
+                    <p:outputLabel for="numero" value="Número " />
+                    <p:inputText id="numero" />
+
+                    <p:outputLabel for="cep" value="CEP " />
+                    <p:inputText id="cep" />
+                </h:panelGrid>
+            </p:panel>
+
+            <br/>
+
+            <p:panel header="Contato">
+                <h:panelGrid columns="4" cellpadding="5">
+                    <p:outputLabel for="nome" value="Nome" />
+                    <p:inputText id="nome" />
+
+                    <p:outputLabel for="email" value="E-mail " />
+                    <p:inputText id="email" />
+
+                    <p:outputLabel for="telefone" value="Telefone " />
+                    <p:inputText id="telefone" />
+
+                    <p:outputLabel for="celular" value="Celular " />
+                    <p:inputText id="celular" />
+                </h:panelGrid>
+            </p:panel>
+
+
+            <p:separator  />
+
+            <p:commandButton value="Limpar" type="reset" />
+            <p:commandButton value="Enviar" update="display" oncomplete="PF('dlg').show()"/>
+
+
+
+
+            <p:dialog widgetVar="dlg" modal="true" resizable="false" header="Values" showEffect="fade">
+                <p:panelGrid id="display" columns="2" columnClasses="label,value">
+                    <h:outputText value="Date: " />
+                    <h:outputText id="dateValue" value="#{maskView.date}" />
+
+                    <h:outputText value="Phone: " />
+                    <h:outputText id="phoneValue" value="#{maskView.phone}" />
+
+                    <h:outputText value="Phone with Ext: " />
+                    <h:outputText id="phoneWithExtValue" value="#{maskView.phoneExt}"/>
+
+                    <h:outputText value="taxId: " />
+                    <h:outputText id="taxValue" value="#{maskView.taxId}" />
+
+                    <h:outputText value="SSN: " />
+                    <h:outputText id="ssnValue" value="#{maskView.ssn}" />
+
+                    <h:outputText value="Product Key: " />
+                    <h:outputText id="keyValue" value="#{maskView.productKey}" />
+                </p:panelGrid>
+
+            </p:dialog>
+        </h:form>
+
+        <footer>
+            <div id="footer_copyright">
+                <img alt="logops" id="logops" src="imagens/logo-ps.png"/>
+                <img alt="logoti" id="logoti" src="imagens/logoti.png"/>
+            </div>                    
+        </footer> 
+    </h:body>
+</html>
+
