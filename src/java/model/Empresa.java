@@ -6,7 +6,8 @@ package model;
 
 public class Empresa {
     
-    private String nome;
+    private String nomeFantasia;
+    private String responsavel;
     private String cnpj;
     private String inscEstadual;
     private String inscMunicipal;
@@ -24,12 +25,20 @@ public class Empresa {
     private Contato contato01 = new Contato();
     private Contato contato02 = new Contato();
     
-    public String getNome() {
-        return nome;
+    public String getNomeFantasia() {
+        return nomeFantasia;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeFantasia(String nomeFantasia) {
+        this.nomeFantasia = nomeFantasia;
+    }
+    
+    public String getResponsavel() {
+        return responsavel;
+    }
+
+    public void setResponsavel(String responsavel) {
+        this.responsavel = responsavel;
     }
 
     public String getCnpj() {

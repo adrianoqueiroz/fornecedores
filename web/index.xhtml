@@ -38,11 +38,19 @@
                         <p:column>
                             <p:outputLabel for="empresa" value="Empresa " />
                         </p:column>
-                        <p:column colspan="5">
-                            <p:inputText id="empresa" size="112" value="#{fornecedoresBean.empresa.nome}"/>
+                        <p:column colspan="3">
+                            <p:inputText id="empresa" size="66" value="#{fornecedoresBean.empresa.nomeFantasia}"/>
+                        </p:column>
+                        
+                        <p:column>
+                            <p:outputLabel for="responsavel" value="Responsavel" />
+                        </p:column>
+                        
+                        <p:column>
+                            <p:inputText id="responsavel" value="#{fornecedoresBean.empresa.responsavel}"/>
                         </p:column>
                     </p:row>
-
+                    
                     <p:row>
                         <p:column>
                             <p:outputLabel for="cnpj" value="CNPJ" />
@@ -157,10 +165,10 @@
                     <p:inputText id="email" value="#{fornecedoresBean.empresa.contato01.email}"/>
 
                     <p:outputLabel for="telefone" value="Telefone " />
-                    <p:inputText id="telefone" value="#{fornecedoresBean.empresa.contato01.telefone}" />
+                    <p:inputMask id="telefone" value="#{fornecedoresBean.empresa.contato01.telefone}" mask="(99) 9999-9999"/>
 
                     <p:outputLabel for="celular" value="Celular " />
-                    <p:inputText id="celular" value="#{fornecedoresBean.empresa.contato01.celular}" />
+                    <p:inputMask id="celular" value="#{fornecedoresBean.empresa.contato01.celular}" mask="(99) 9?999-99999"/>
                 </h:panelGrid>
             </p:panel>
 
@@ -171,11 +179,60 @@
 
             <p:dialog widgetVar="dlg" modal="true" resizable="false" header="Values" showEffect="fade">
                 <p:panelGrid id="display" columns="2" columnClasses="label,value">
-                    <h:outputText value="Nome: " />
-                    <h:outputText id="nomeValue" value="#{fornecedoresBean.empresa.nome}" />
+                    <h:outputText value="Empresa: " />
+                    <h:outputText id="empresaValue" value="#{fornecedoresBean.empresa.nomeFantasia}" />
+                    
+                    <h:outputText value="Responsavel: " />
+                    <h:outputText id="responsavelValue" value="#{fornecedoresBean.empresa.responsavel}" />
 
                     <h:outputText value="CNPJ: " />
                     <h:outputText id="cnpjValue" value="#{fornecedoresBean.empresa.cnpj}" />
+                    
+                    <h:outputText value="Insc. Estadual: " />
+                    <h:outputText id="inscEstadualValue" value="#{fornecedoresBean.empresa.inscEstadual}" />
+                    
+                    <h:outputText value="Insc. Municipal: " />
+                    <h:outputText id="inscMunicipalValue" value="#{fornecedoresBean.empresa.inscMunicipal}" />
+                    
+                    <h:outputText value="Categorias: " />
+                    <h:outputText id="categoria01Value" value="categorias" />
+                    
+                    <h:outputText value="Qualificacao: " />
+                    <h:outputText id="qualificacaoValue" value="#{fornecedoresBean.empresa.qualificacao}" />
+                    
+                    <h:outputText value="Obserevacoes: " />
+                    <h:outputText id="observacaoValue" value="#{fornecedoresBean.empresa.observacao}" />
+                    
+                    <h:outputText value="Estado: " />
+                    <h:outputText id="estadoValue" value="#{fornecedoresBean.empresa.estado}" />
+                    
+                    <h:outputText value="Cidade: " />
+                    <h:outputText id="cidadeValue" value="#{fornecedoresBean.empresa.cidade}" />
+                    
+                    <h:outputText value="Bairro: " />
+                    <h:outputText id="bairroValue" value="#{fornecedoresBean.empresa.bairro}" />
+                    
+                    <h:outputText value="Logradouro: " />
+                    <h:outputText id="logradouroValue" value="#{fornecedoresBean.empresa.logradouro}" />
+                    
+                    <h:outputText value="Numero: " />
+                    <h:outputText id="numeroValue" value="#{fornecedoresBean.empresa.numero}" />
+                    
+                    <h:outputText value="Cep: " />
+                    <h:outputText id="cepValue" value="#{fornecedoresBean.empresa.cep}" />
+                    
+                    <h:outputText value="Nome: " />
+                    <h:outputText id="nomeValue" value="#{fornecedoresBean.empresa.contato01.nome}" />
+                    
+                    <h:outputText value="Email: " />
+                    <h:outputText id="emailValue" value="#{fornecedoresBean.empresa.contato01.email}" />
+                    
+                    <h:outputText value="Telefone: " />
+                    <h:outputText id="telefoneValue" value="#{fornecedoresBean.empresa.contato01.telefone}" />
+                    
+                    <h:outputText value="Celular: " />
+                    <h:outputText id="celularValue" value="#{fornecedoresBean.empresa.contato01.celular}" />
+                    
                 </p:panelGrid>
             </p:dialog>
         </h:form>
