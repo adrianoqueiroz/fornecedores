@@ -131,26 +131,28 @@
             <p:panel header="Endereço"> 
                 <h:panelGrid columns="6" cellpadding="5">
                     <p:outputLabel for="estado" value="Estado" />
-                    <p:selectOneMenu id="estado" style="width:195px;">
+                    <p:selectOneMenu id="estado" style="width:195px;" value="#{fornecedoresBean.empresa.estado}">
                         <f:selectItem itemLabel="Selecione..."/>
+                        <f:selectItem itemLabel="bahia" itemValue="bahia"/>
                     </p:selectOneMenu>
 
                     <p:outputLabel for="cidade" value="Cidade" />
-                    <p:selectOneMenu id="cidade" style="width:195px;">
+                    <p:selectOneMenu id="cidade" style="width:195px;" value="#{fornecedoresBean.empresa.cidade}">
                         <f:selectItem itemLabel="Selecione..."/>
                     </p:selectOneMenu>
 
                     <p:outputLabel for="bairro" value="Bairro " />
-                    <p:inputText id="bairro" />
-
+                    <p:inputText id="bairro" value="#{fornecedoresBean.empresa.bairro}"/>
+                    
                     <p:outputLabel for="logradouro" value="Logradouro " />
-                    <p:inputText id="logradouro" />
+                    <p:inputText id="logradouro" value="#{fornecedoresBean.empresa.logradouro}"/>
 
                     <p:outputLabel for="numero" value="Número " />
-                    <p:inputText id="numero" />
-
+                    <p:inputText id="numero" value="#{fornecedoresBean.empresa.numero}"/>
+                    
                     <p:outputLabel for="cep" value="CEP " />
-                    <p:inputText id="cep" />
+                    <p:inputText id="cep" value="#{fornecedoresBean.empresa.cep}"/>
+                    
                 </h:panelGrid>
             </p:panel>
 
