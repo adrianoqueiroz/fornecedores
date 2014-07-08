@@ -175,7 +175,7 @@
             <p:dialog widgetVar="dlg" modal="true" resizable="false" header="Values" showEffect="fade">
                 <p:panelGrid id="display" columns="2" columnClasses="label,value">
                     <h:outputText value="Empresa: " />
-                    <h:outputText value="#{fornecedoresBean.empresa.nome.toString}" />
+                    <h:outputText value="#{fornecedoresBean.empresa.nome}" />
 
                     <h:outputText value="Phone: " />
                     <h:outputText id="phoneValue"  />
@@ -191,7 +191,6 @@
 
                     <h:outputText value="Product Key: " />
                     <h:outputText id="keyValue" />
-                    <p:commandButton value="Atualizar" update="display" />
                 </p:panelGrid>
 
             </p:dialog>
