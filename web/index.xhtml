@@ -15,9 +15,10 @@
         <img src="imagens/logo.png"/>
 
         <br/><br/><br/>
-        
+
         <h:form>    
-            <p:growl id="messages" showDetail="true" />
+            <p:growl id="messagesGrowl" showDetail="true" />
+            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
 
             <p:toolbar>
                 <f:facet name="left">
@@ -150,49 +151,32 @@
             <p:panel header="Contato">
                 <h:panelGrid columns="4" cellpadding="5">
                     <p:outputLabel for="nome" value="Nome" />
-                    <p:inputText id="nome" />
+                    <p:inputText id="nome" value="#{fornecedoresBean.empresa.contato01.nome}" />
 
                     <p:outputLabel for="email" value="E-mail " />
-                    <p:inputText id="email" />
+                    <p:inputText id="email" value="#{fornecedoresBean.empresa.contato01.email}"/>
 
                     <p:outputLabel for="telefone" value="Telefone " />
-                    <p:inputText id="telefone" />
+                    <p:inputText id="telefone" value="#{fornecedoresBean.empresa.contato01.telefone}" />
 
                     <p:outputLabel for="celular" value="Celular " />
-                    <p:inputText id="celular" />
+                    <p:inputText id="celular" value="#{fornecedoresBean.empresa.contato01.celular}" />
                 </h:panelGrid>
             </p:panel>
-
 
             <p:separator  />
 
             <p:commandButton value="Limpar" type="reset" />
             <p:commandButton value="Enviar" update="display" oncomplete="PF('dlg').show()"/>
 
-
-
-
             <p:dialog widgetVar="dlg" modal="true" resizable="false" header="Values" showEffect="fade">
                 <p:panelGrid id="display" columns="2" columnClasses="label,value">
-                    <h:outputText value="Empresa: " />
-                    <h:outputText value="#{fornecedoresBean.empresa.nome}" />
+                    <h:outputText value="Nome: " />
+                    <h:outputText id="nomeValue" value="#{fornecedoresBean.empresa.nome}" />
 
-                    <h:outputText value="Phone: " />
-                    <h:outputText id="phoneValue"  />
-
-                    <h:outputText value="Phone with Ext: " />
-                    <h:outputText id="phoneWithExtValue" />
-
-                    <h:outputText value="taxId: " />
-                    <h:outputText id="taxValue" />
-
-                    <h:outputText value="SSN: " />
-                    <h:outputText id="ssnValue" />
-
-                    <h:outputText value="Product Key: " />
-                    <h:outputText id="keyValue" />
+                    <h:outputText value="CNPJ: " />
+                    <h:outputText id="cnpjValue" value="#{fornecedoresBean.empresa.cnpj}" />
                 </p:panelGrid>
-
             </p:dialog>
         </h:form>
 

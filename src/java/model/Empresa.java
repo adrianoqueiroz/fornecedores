@@ -4,19 +4,15 @@
  */
 package model;
 
-/**
- *
- * @author marcel.campos
- */
 public class Empresa {
     
     private String nome;
     private String cnpj;
     private String inscEstadual;
     private String inscMunicipal;
-    private Categoria categoria01;
-    private Categoria categoria02;
-    private Categoria categoria03;
+    private Categoria categoria01 = new Categoria();;
+    private Categoria categoria02 = new Categoria();;
+    private Categoria categoria03 = new Categoria();;
     private String qualificacao;
     private String observacao;
     private String estado;
@@ -25,7 +21,9 @@ public class Empresa {
     private String logradouro;
     private int numero;
     private String cep;
-
+    private Contato contato01 = new Contato();
+    private Contato contato02 = new Contato();
+    
     public String getNome() {
         return nome;
     }
@@ -144,6 +142,22 @@ public class Empresa {
 
     public void setCep(String cep) {
         this.cep = cep;
+    }
+
+    public Contato getContato01() {
+        return contato01;
+    }
+
+    public void setContato01(Contato contato01) {
+        this.contato01 = contato01;
+    }
+
+    public Contato getContato02() {
+        return contato02;
+    }
+
+    public void setContato02(Contato contato02) {
+        this.contato02 = contato02;
     }
     
     

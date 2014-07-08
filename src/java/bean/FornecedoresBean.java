@@ -1,20 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package bean;
 
 import javax.faces.bean.ManagedBean;
 import model.Empresa;
 
-/**
- *
- * @author marcel.campos
- */
+
 @ManagedBean
 public class FornecedoresBean {
-    private Empresa empresa;
-
+    private Empresa empresa = new Empresa();
+    
     public Empresa getEmpresa() {
         return empresa;
     }
@@ -22,7 +15,4 @@ public class FornecedoresBean {
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
-    
-    
-    
 }
