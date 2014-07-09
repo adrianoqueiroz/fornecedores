@@ -7,7 +7,9 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,23 +17,26 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Adriano
  */
 @Entity
-@Table(name = "categoria")
+@Table(name = "cidade")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Categoria.findAll", query = "SELECT c FROM Categoria c"),
-    @NamedQuery(name = "Categoria.findById", query = "SELECT c FROM Categoria c WHERE c.id = :id"),
-    @NamedQuery(name = "Categoria.findByNome", query = "SELECT c FROM Categoria c WHERE c.nome = :nome")})
-public class Categoria implements Serializable {
+    @NamedQuery(name = "Cidade.findAll", query = "SELECT c FROM Cidade c"),
+    @NamedQuery(name = "Cidade.findById", query = "SELECT c FROM Cidade c WHERE c.id = :id"),
+   // @NamedQuery(name = "Cidade.findByEstadoId", query = "SELECT c FROM Cidade c WHERE c.estado_id = :estado_id"),
+    @NamedQuery(name = "Cidade.findByNome", query = "SELECT c FROM Cidade c WHERE c.nome = :nome")})
+public class Cidade implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -41,14 +46,16 @@ public class Categoria implements Serializable {
     @Size(max = 45)
     @Column(name = "nome")
     private String nome;
-    @JoinColumn(name = "fornecedor_id", referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cidadeId")
+    private Collection<Fornecedor> fornecedorCollection;
+    @JoinColumn(name = "estado_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Fornecedor fornecedorId;
+    private Estado estadoId;
 
-    public Categoria() {
+    public Cidade() {
     }
 
-    public Categoria(Integer id) {
+    public Cidade(Integer id) {
         this.id = id;
     }
 
@@ -68,12 +75,21 @@ public class Categoria implements Serializable {
         this.nome = nome;
     }
 
-    public Fornecedor getFornecedorId() {
-        return fornecedorId;
+    @XmlTransient
+    public Collection<Fornecedor> getFornecedorCollection() {
+        return fornecedorCollection;
     }
 
-    public void setFornecedorId(Fornecedor fornecedorId) {
-        this.fornecedorId = fornecedorId;
+    public void setFornecedorCollection(Collection<Fornecedor> fornecedorCollection) {
+        this.fornecedorCollection = fornecedorCollection;
+    }
+
+    public Estado getEstadoId() {
+        return estadoId;
+    }
+
+    public void setEstadoId(Estado estadoId) {
+        this.estadoId = estadoId;
     }
 
     @Override
@@ -86,10 +102,10 @@ public class Categoria implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Categoria)) {
+        if (!(object instanceof Cidade)) {
             return false;
         }
-        Categoria other = (Categoria) object;
+        Cidade other = (Cidade) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -98,7 +114,7 @@ public class Categoria implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Categoria[ id=" + id + " ]";
+        return "model.Cidade[ id=" + id + " ]";
     }
     
 }

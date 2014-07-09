@@ -7,31 +7,34 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Adriano
  */
 @Entity
-@Table(name = "categoria")
+@Table(name = "estado")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Categoria.findAll", query = "SELECT c FROM Categoria c"),
-    @NamedQuery(name = "Categoria.findById", query = "SELECT c FROM Categoria c WHERE c.id = :id"),
-    @NamedQuery(name = "Categoria.findByNome", query = "SELECT c FROM Categoria c WHERE c.nome = :nome")})
-public class Categoria implements Serializable {
+    @NamedQuery(name = "Estado.findAll", query = "SELECT e FROM Estado e"),
+    @NamedQuery(name = "Estado.findById", query = "SELECT e FROM Estado e WHERE e.id = :id"),
+    @NamedQuery(name = "Estado.findBySigla", query = "SELECT e FROM Estado e WHERE e.sigla = :sigla"),
+    @NamedQuery(name = "Estado.findByNome", query = "SELECT e FROM Estado e WHERE e.nome = :nome")})
+public class Estado implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -39,16 +42,18 @@ public class Categoria implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Size(max = 45)
+    @Column(name = "sigla")
+    private String sigla;
+    @Size(max = 45)
     @Column(name = "nome")
     private String nome;
-    @JoinColumn(name = "fornecedor_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Fornecedor fornecedorId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadoId")
+    private Collection<Cidade> cidadeCollection;
 
-    public Categoria() {
+    public Estado() {
     }
 
-    public Categoria(Integer id) {
+    public Estado(Integer id) {
         this.id = id;
     }
 
@@ -60,6 +65,14 @@ public class Categoria implements Serializable {
         this.id = id;
     }
 
+    public String getSigla() {
+        return sigla;
+    }
+
+    public void setSigla(String sigla) {
+        this.sigla = sigla;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -68,12 +81,13 @@ public class Categoria implements Serializable {
         this.nome = nome;
     }
 
-    public Fornecedor getFornecedorId() {
-        return fornecedorId;
+    @XmlTransient
+    public Collection<Cidade> getCidadeCollection() {
+        return cidadeCollection;
     }
 
-    public void setFornecedorId(Fornecedor fornecedorId) {
-        this.fornecedorId = fornecedorId;
+    public void setCidadeCollection(Collection<Cidade> cidadeCollection) {
+        this.cidadeCollection = cidadeCollection;
     }
 
     @Override
@@ -86,10 +100,10 @@ public class Categoria implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Categoria)) {
+        if (!(object instanceof Estado)) {
             return false;
         }
-        Categoria other = (Categoria) object;
+        Estado other = (Estado) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -98,7 +112,7 @@ public class Categoria implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Categoria[ id=" + id + " ]";
+        return "model.Estado[ id=" + id + " ]";
     }
     
 }

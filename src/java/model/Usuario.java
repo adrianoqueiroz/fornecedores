@@ -11,8 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -25,13 +23,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Adriano
  */
 @Entity
-@Table(name = "categoria")
+@Table(name = "usuario")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Categoria.findAll", query = "SELECT c FROM Categoria c"),
-    @NamedQuery(name = "Categoria.findById", query = "SELECT c FROM Categoria c WHERE c.id = :id"),
-    @NamedQuery(name = "Categoria.findByNome", query = "SELECT c FROM Categoria c WHERE c.nome = :nome")})
-public class Categoria implements Serializable {
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
+    @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id"),
+    @NamedQuery(name = "Usuario.findByUsuario", query = "SELECT u FROM Usuario u WHERE u.usuario = :usuario"),
+    @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha")})
+public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -39,16 +38,16 @@ public class Categoria implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Size(max = 45)
-    @Column(name = "nome")
-    private String nome;
-    @JoinColumn(name = "fornecedor_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Fornecedor fornecedorId;
+    @Column(name = "usuario")
+    private String usuario;
+    @Size(max = 45)
+    @Column(name = "senha")
+    private String senha;
 
-    public Categoria() {
+    public Usuario() {
     }
 
-    public Categoria(Integer id) {
+    public Usuario(Integer id) {
         this.id = id;
     }
 
@@ -60,20 +59,20 @@ public class Categoria implements Serializable {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getUsuario() {
+        return usuario;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
-    public Fornecedor getFornecedorId() {
-        return fornecedorId;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setFornecedorId(Fornecedor fornecedorId) {
-        this.fornecedorId = fornecedorId;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     @Override
@@ -86,10 +85,10 @@ public class Categoria implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Categoria)) {
+        if (!(object instanceof Usuario)) {
             return false;
         }
-        Categoria other = (Categoria) object;
+        Usuario other = (Usuario) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -98,7 +97,7 @@ public class Categoria implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Categoria[ id=" + id + " ]";
+        return "model.Usuario[ id=" + id + " ]";
     }
     
 }

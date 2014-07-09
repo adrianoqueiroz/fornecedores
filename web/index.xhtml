@@ -31,15 +31,21 @@
 
         <br/>
 
-        <h:form>
+        <h:form id="fornecedoresForm">
             <p:panel header="Identificação">
                 <p:panelGrid>
                     <p:row>
                         <p:column>
-                            <p:outputLabel for="empresa" value="Empresa " />
+                            <p:outputLabel for="empresa" value="Nome Fantasia " />
                         </p:column>
-                        <p:column colspan="5">
-                            <p:inputText id="empresa" size="112" value="#{fornecedoresBean.empresa.nome}"/>
+                        <p:column colspan="3">
+                            <p:inputText id="empresa" size="65" value="#{fornecedoresBean.fornecedor.nomeFantasia}"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel for="responsavel" value="Responsável " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="responsavel" value="#{fornecedoresBean.fornecedor.responsavel}"/>
                         </p:column>
                     </p:row>
 
@@ -48,19 +54,19 @@
                             <p:outputLabel for="cnpj" value="CNPJ" />
                         </p:column>
                         <p:column>
-                            <p:inputMask id="cnpj" value="#{fornecedoresBean.empresa.cnpj}" mask="99.999.999/9999-99"/>
+                            <p:inputMask id="cnpj" value="#{fornecedoresBean.fornecedor.cnpj}" mask="99.999.999/9999-99"/>
                         </p:column>
                         <p:column>
                             <p:outputLabel for="inscEstadual" value="Insc. Estadual " />
                         </p:column>
                         <p:column>
-                            <p:inputText id="inscEstadual" value="#{fornecedoresBean.empresa.inscEstadual}"/>
+                            <p:inputText id="inscEstadual" value="#{fornecedoresBean.fornecedor.inscEstadual}"/>
                         </p:column>
                         <p:column>
                             <p:outputLabel for="inscMunicipal" value="Insc. Municipal " />
                         </p:column>
                         <p:column>
-                            <p:inputText id="inscMunicipal" value="#{fornecedoresBean.empresa.inscMunicipal}"/>
+                            <p:inputText id="inscMunicipal" value="#{fornecedoresBean.fornecedor.inscMunicipal}"/>
                         </p:column>
                     </p:row>
 
@@ -71,6 +77,7 @@
                         <p:column>
                             <p:selectOneMenu id="categoria01" style="width:195px;">
                                 <f:selectItem itemLabel="Selecione..." />
+                                <f:selectItems value="#{fornecedoresBean.selectItemCategorias}" />
                             </p:selectOneMenu>
                         </p:column>
 
@@ -98,7 +105,7 @@
                             <p:outputLabel for="qualificacao" value="Qualificação" />
                         </p:column>
                         <p:column>
-                            <p:selectOneRadio id="qualificacao" layout="grid" value="#{fornecedoresBean.empresa.qualificacao}" columns="1">
+                            <p:selectOneRadio id="qualificacao" layout="grid" value="#{fornecedoresBean.fornecedor.qualificacao}" columns="1">
                                 <f:selectItem itemLabel="Muito Bom" itemValue="Muito Bom" />
                                 <f:selectItem itemLabel="Bom" itemValue="Bom" />
                                 <f:selectItem itemLabel="Ruim" itemValue="Ruim" />
@@ -110,7 +117,7 @@
                         </p:column>
                         <p:column colspan="3">
                             <h:panelGrid>
-                                <p:inputTextarea id="observacao" value="#{fornecedoresBean.empresa.observacao}" rows="2" cols="65" counter="displayCounter" maxlength="150" counterTemplate="{0} Caracteres restantes." autoResize="false" />
+                                <p:inputTextarea id="observacao" value="#{fornecedoresBean.fornecedor.observacao}" rows="2" cols="65" counter="displayCounter" maxlength="150" counterTemplate="{0} Caracteres restantes." autoResize="false" />
                                 <h:outputText id="displayCounter" />
                             </h:panelGrid>
                         </p:column>
@@ -123,13 +130,16 @@
             <p:panel header="Endereço"> 
                 <h:panelGrid columns="6" cellpadding="5">
                     <p:outputLabel for="estado" value="Estado" />
-                    <p:selectOneMenu id="estado" style="width:195px;">
+                    <p:selectOneMenu id="estado" style="width:195px;" value="#{fornecedoresBean.estadoSelecionado}">
                         <f:selectItem itemLabel="Selecione..."/>
+                        <f:selectItems value="#{fornecedoresBean.selectItemEstados}" />
+                        <p:ajax event="change" update=":fornecedoresForm:cidade"/>
                     </p:selectOneMenu>
 
                     <p:outputLabel for="cidade" value="Cidade" />
-                    <p:selectOneMenu id="cidade" style="width:195px;">
+                    <p:selectOneMenu id="cidade" style="width:195px;" value="#{fornecedoresBean.cidadeSelecionada}">
                         <f:selectItem itemLabel="Selecione..."/>
+                        <f:selectItems value="#{fornecedoresBean.selectItemCidades}" />
                     </p:selectOneMenu>
 
                     <p:outputLabel for="bairro" value="Bairro " />
@@ -151,16 +161,16 @@
             <p:panel header="Contato">
                 <h:panelGrid columns="4" cellpadding="5">
                     <p:outputLabel for="nome" value="Nome" />
-                    <p:inputText id="nome" value="#{fornecedoresBean.empresa.contato01.nome}" />
+                    <p:inputText id="nome" />
 
                     <p:outputLabel for="email" value="E-mail " />
-                    <p:inputText id="email" value="#{fornecedoresBean.empresa.contato01.email}"/>
+                    <p:inputText id="email" />
 
                     <p:outputLabel for="telefone" value="Telefone " />
-                    <p:inputText id="telefone" value="#{fornecedoresBean.empresa.contato01.telefone}" />
+                    <p:inputText id="telefone" />
 
                     <p:outputLabel for="celular" value="Celular " />
-                    <p:inputText id="celular" value="#{fornecedoresBean.empresa.contato01.celular}" />
+                    <p:inputText id="celular" />
                 </h:panelGrid>
             </p:panel>
 
@@ -172,10 +182,10 @@
             <p:dialog widgetVar="dlg" modal="true" resizable="false" header="Values" showEffect="fade">
                 <p:panelGrid id="display" columns="2" columnClasses="label,value">
                     <h:outputText value="Nome: " />
-                    <h:outputText id="nomeValue" value="#{fornecedoresBean.empresa.nome}" />
+                    <h:outputText id="nomeValue" value="#{fornecedoresBean.fornecedor.nomeFantasia}" />
 
                     <h:outputText value="CNPJ: " />
-                    <h:outputText id="cnpjValue" value="#{fornecedoresBean.empresa.cnpj}" />
+                    <h:outputText id="cnpjValue" value="#{fornecedoresBean.fornecedor.cnpj}" />
                 </p:panelGrid>
             </p:dialog>
         </h:form>
