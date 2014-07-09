@@ -26,14 +26,14 @@
                         <center>
                             <h:panelGrid cellpadding="2" styleClass="semBorda">
                                 <p:focus/>
-                                <p:inputText id="usuario" style="width:300px;" type="text" value="#{loginBean.usuario}" />
+                                <p:inputText id="usuario" style="width:300px;" type="text"/>
                                 <p:watermark for="usuario" value="Usuário" /> 
-                                <p:inputText id="senha" style="width:300px;" type="password"  value="#{loginBean.senha}" />
+                                <p:inputText id="senha" style="width:300px;" type="password" />
                                 <p:watermark for="senha" value="Senha" /> 
 
                                 <h:panelGrid columns="2" styleClass="semBorda">
                                     <p:spacer />
-                                    <p:commandButton id="botao_login" ajax="false" value="Login" action="#{loginBean.efetuaLogin()}"/>
+                                    <p:commandButton id="botao_login" ajax="false" value="Login" action="index.xhtml"/>
                                 </h:panelGrid>
 
                             </h:panelGrid>

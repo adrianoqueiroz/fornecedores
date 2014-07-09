@@ -17,9 +17,6 @@
         <br/><br/><br/>
 
         <h:form>    
-            <p:growl id="messagesGrowl" showDetail="true" />
-            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-
             <p:toolbar>
                 <f:facet name="left">
                     <p:commandButton type="button" value="Cadastrar" icon="ui-icon-document" />
@@ -32,6 +29,7 @@
         <br/>
 
         <h:form id="fornecedoresForm">
+            <p:growl id="messages" showDetail="true" />
             <p:panel header="Identificação">
                 <p:panelGrid>
                     <p:row>
@@ -105,12 +103,10 @@
                             <p:outputLabel for="qualificacao" value="Qualificação" />
                         </p:column>
                         <p:column>
-                            <p:selectOneRadio id="qualificacao" layout="grid" value="#{fornecedoresBean.fornecedor.qualificacao}" columns="1">
-                                <f:selectItem itemLabel="Muito Bom" itemValue="Muito Bom" />
-                                <f:selectItem itemLabel="Bom" itemValue="Bom" />
-                                <f:selectItem itemLabel="Ruim" itemValue="Ruim" />
-                                <f:selectItem itemLabel="Péssimo" itemValue="Péssimo" />
-                            </p:selectOneRadio>
+                            <p:rating id="qualificacao" value="#{fornecedoresBean.fornecedor.qualificacao}">
+                                <p:ajax event="rate" listener="#{ratingView.onrate}" update="messages" />
+                                <p:ajax event="cancel" listener="#{ratingView.oncancel}" update="messages" />
+                            </p:rating>
                         </p:column>
                         <p:column>
                             <p:outputLabel for="observacao" value="Observações" />
@@ -137,7 +133,7 @@
                     </p:selectOneMenu>
 
                     <p:outputLabel for="cidade" value="Cidade" />
-                    <p:selectOneMenu id="cidade" style="width:195px;" value="#{fornecedoresBean.cidadeSelecionada}">
+                    <p:selectOneMenu id="cidade" style="width:195px;" value="#{fornecedoresBean.cidadeSelecionada}" filter="true">
                         <f:selectItem itemLabel="Selecione..."/>
                         <f:selectItems value="#{fornecedoresBean.selectItemCidades}" />
                     </p:selectOneMenu>
@@ -152,7 +148,7 @@
                     <p:inputText id="numero" />
 
                     <p:outputLabel for="cep" value="CEP " />
-                    <p:inputText id="cep" />
+                    <p:inputMask id="cep" mask="99.999-999" />
                 </h:panelGrid>
             </p:panel>
 

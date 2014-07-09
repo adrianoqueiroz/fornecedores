@@ -6,12 +6,15 @@ import JPA.EstadoJpaController;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import model.Categoria;
 import model.Cidade;
 import model.Estado;
 import model.Fornecedor;
+import org.primefaces.event.RateEvent;
 
 @ManagedBean
 public class FornecedoresBean {
@@ -22,11 +25,11 @@ public class FornecedoresBean {
     private CidadeJpaController cidadeJpaController;
     @EJB
     private CategoriaJpaController categoriaJpaController;
-    
+
     private Fornecedor fornecedor = new Fornecedor();
 
     private int estadoSelecionado;
-    
+
     private int cidadeSelecionada;
 
     public Fornecedor getFornecedor() {
@@ -52,7 +55,7 @@ public class FornecedoresBean {
     public void setCidadeSelecionada(int cidadeSelecionada) {
         this.cidadeSelecionada = cidadeSelecionada;
     }
-    
+
     public List<SelectItem> getSelectItemCategorias() {
         List<Categoria> listaCategorias = categoriaJpaController.findCategoriaEntities();
         List<SelectItem> itens = new ArrayList<>(listaCategorias.size());
@@ -61,7 +64,7 @@ public class FornecedoresBean {
             itens.add(new SelectItem(c.getId(), c.getNome()));
         }
         return itens;
-    }    
+    }
 
     public List<SelectItem> getSelectItemEstados() {
 
@@ -86,5 +89,15 @@ public class FornecedoresBean {
             }
         }
         return itens;
+    }
+
+    public void onrate(RateEvent rateEvent) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Qualificação do Fornecedor", "Você qualificou:" + ((Integer) rateEvent.getRating()));
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void oncancel() {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Qualificação do Fornecedor", "Qualificação resetada");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }
