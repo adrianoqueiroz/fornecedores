@@ -3,6 +3,7 @@ package bean;
 import JPA.CategoriaJpaController;
 import JPA.CidadeJpaController;
 import JPA.EstadoJpaController;
+import JPA.FornecedorJpaController;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -25,6 +26,8 @@ public class FornecedoresBean {
     private CidadeJpaController cidadeJpaController;
     @EJB
     private CategoriaJpaController categoriaJpaController;
+    @EJB
+    private FornecedorJpaController fornecedorJpaController;
 
     private Fornecedor fornecedor = new Fornecedor();
 
@@ -118,5 +121,10 @@ public class FornecedoresBean {
     public void oncancel() {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Qualificação do Fornecedor", "Qualificação resetada");
         FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void salvar() throws Exception {
+        Cidade cidade = cidadeJpaController.findCidade(cidadeSelecionada);
+        fornecedorJpaController.create(fornecedor);
     }
 }
