@@ -34,7 +34,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Cidade.findAll", query = "SELECT c FROM Cidade c"),
     @NamedQuery(name = "Cidade.findById", query = "SELECT c FROM Cidade c WHERE c.id = :id"),
-   // @NamedQuery(name = "Cidade.findByEstadoId", query = "SELECT c FROM Cidade c WHERE c.estado_id = :estado_id"),
     @NamedQuery(name = "Cidade.findByNome", query = "SELECT c FROM Cidade c WHERE c.nome = :nome")})
 public class Cidade implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -46,11 +45,11 @@ public class Cidade implements Serializable {
     @Size(max = 45)
     @Column(name = "nome")
     private String nome;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cidadeId")
-    private Collection<Fornecedor> fornecedorCollection;
     @JoinColumn(name = "estado_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Estado estadoId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cidadeId")
+    private Collection<Endereco> enderecoCollection;
 
     public Cidade() {
     }
@@ -75,21 +74,21 @@ public class Cidade implements Serializable {
         this.nome = nome;
     }
 
-    @XmlTransient
-    public Collection<Fornecedor> getFornecedorCollection() {
-        return fornecedorCollection;
-    }
-
-    public void setFornecedorCollection(Collection<Fornecedor> fornecedorCollection) {
-        this.fornecedorCollection = fornecedorCollection;
-    }
-
     public Estado getEstadoId() {
         return estadoId;
     }
 
     public void setEstadoId(Estado estadoId) {
         this.estadoId = estadoId;
+    }
+
+    @XmlTransient
+    public Collection<Endereco> getEnderecoCollection() {
+        return enderecoCollection;
+    }
+
+    public void setEnderecoCollection(Collection<Endereco> enderecoCollection) {
+        this.enderecoCollection = enderecoCollection;
     }
 
     @Override

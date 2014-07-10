@@ -11,10 +11,12 @@ import JPA.exceptions.PreexistingEntityException;
 import JPA.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
@@ -25,23 +27,18 @@ import model.Fornecedor;
  *
  * @author Adriano
  */
+@Stateless
 public class ContatoJpaController implements Serializable {
 
-    public ContatoJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
-        this.emf = emf;
-    }
-    private UserTransaction utx = null;
-    private EntityManagerFactory emf = null;
-
+    @PersistenceUnit(unitName = "fornecedoresPU") //inject from your application server
+    private EntityManagerFactory emf;
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
-    }
+    }   
 
     public void create(Contato contato) throws PreexistingEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            utx.begin();
             em = getEntityManager();
             Fornecedor fornecedorId = contato.getFornecedorId();
             if (fornecedorId != null) {
@@ -53,13 +50,7 @@ public class ContatoJpaController implements Serializable {
                 fornecedorId.getContatoCollection().add(contato);
                 fornecedorId = em.merge(fornecedorId);
             }
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
             if (findContato(contato.getId()) != null) {
                 throw new PreexistingEntityException("Contato " + contato + " already exists.", ex);
             }
@@ -74,7 +65,6 @@ public class ContatoJpaController implements Serializable {
     public void edit(Contato contato) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            utx.begin();
             em = getEntityManager();
             Contato persistentContato = em.find(Contato.class, contato.getId());
             Fornecedor fornecedorIdOld = persistentContato.getFornecedorId();
@@ -92,13 +82,7 @@ public class ContatoJpaController implements Serializable {
                 fornecedorIdNew.getContatoCollection().add(contato);
                 fornecedorIdNew = em.merge(fornecedorIdNew);
             }
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = contato.getId();
@@ -117,7 +101,6 @@ public class ContatoJpaController implements Serializable {
     public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            utx.begin();
             em = getEntityManager();
             Contato contato;
             try {
@@ -132,13 +115,7 @@ public class ContatoJpaController implements Serializable {
                 fornecedorId = em.merge(fornecedorId);
             }
             em.remove(contato);
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
             throw ex;
         } finally {
             if (em != null) {

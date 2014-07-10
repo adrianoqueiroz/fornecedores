@@ -14,6 +14,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -39,8 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Fornecedor.findByCnpj", query = "SELECT f FROM Fornecedor f WHERE f.cnpj = :cnpj"),
     @NamedQuery(name = "Fornecedor.findByInscEstadual", query = "SELECT f FROM Fornecedor f WHERE f.inscEstadual = :inscEstadual"),
     @NamedQuery(name = "Fornecedor.findByInscMunicipal", query = "SELECT f FROM Fornecedor f WHERE f.inscMunicipal = :inscMunicipal"),
-    @NamedQuery(name = "Fornecedor.findByQualificacao", query = "SELECT f FROM Fornecedor f WHERE f.qualificacao = :qualificacao"),
-    @NamedQuery(name = "Fornecedor.findByObservacao", query = "SELECT f FROM Fornecedor f WHERE f.observacao = :observacao")})
+    @NamedQuery(name = "Fornecedor.findByQualificacao", query = "SELECT f FROM Fornecedor f WHERE f.qualificacao = :qualificacao")})
 public class Fornecedor implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -63,17 +64,17 @@ public class Fornecedor implements Serializable {
     @Size(max = 45)
     @Column(name = "insc_municipal")
     private String inscMunicipal;
-    @Size(max = 45)
     @Column(name = "qualificacao")
-    private String qualificacao;
-    @Size(max = 45)
+    private Integer qualificacao;
+    @Lob
+    @Size(max = 65535)
     @Column(name = "observacao")
     private String observacao;
-    @JoinColumn(name = "cidade_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Cidade cidadeId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fornecedorId")
+    @ManyToMany(mappedBy = "fornecedorCollection")
     private Collection<Categoria> categoriaCollection;
+    @JoinColumn(name = "endereco_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Endereco enderecoId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fornecedorId")
     private Collection<Contato> contatoCollection;
 
@@ -132,11 +133,11 @@ public class Fornecedor implements Serializable {
         this.inscMunicipal = inscMunicipal;
     }
 
-    public String getQualificacao() {
+    public Integer getQualificacao() {
         return qualificacao;
     }
 
-    public void setQualificacao(String qualificacao) {
+    public void setQualificacao(Integer qualificacao) {
         this.qualificacao = qualificacao;
     }
 
@@ -148,14 +149,6 @@ public class Fornecedor implements Serializable {
         this.observacao = observacao;
     }
 
-    public Cidade getCidadeId() {
-        return cidadeId;
-    }
-
-    public void setCidadeId(Cidade cidadeId) {
-        this.cidadeId = cidadeId;
-    }
-
     @XmlTransient
     public Collection<Categoria> getCategoriaCollection() {
         return categoriaCollection;
@@ -163,6 +156,14 @@ public class Fornecedor implements Serializable {
 
     public void setCategoriaCollection(Collection<Categoria> categoriaCollection) {
         this.categoriaCollection = categoriaCollection;
+    }
+
+    public Endereco getEnderecoId() {
+        return enderecoId;
+    }
+
+    public void setEnderecoId(Endereco enderecoId) {
+        this.enderecoId = enderecoId;
     }
 
     @XmlTransient

@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package JPA;
 
 import JPA.exceptions.IllegalOrphanException;
@@ -19,13 +20,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 import model.Cidade;
+import model.Endereco;
 import model.Estado;
-import model.Fornecedor;
 
 /**
  *
@@ -39,10 +39,10 @@ public class CidadeJpaController implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }   
-    
+
     public void create(Cidade cidade) throws PreexistingEntityException, RollbackFailureException, Exception {
-        if (cidade.getFornecedorCollection() == null) {
-            cidade.setFornecedorCollection(new ArrayList<Fornecedor>());
+        if (cidade.getEnderecoCollection() == null) {
+            cidade.setEnderecoCollection(new ArrayList<Endereco>());
         }
         EntityManager em = null;
         try {
@@ -52,24 +52,24 @@ public class CidadeJpaController implements Serializable {
                 estadoId = em.getReference(estadoId.getClass(), estadoId.getId());
                 cidade.setEstadoId(estadoId);
             }
-            Collection<Fornecedor> attachedFornecedorCollection = new ArrayList<Fornecedor>();
-            for (Fornecedor fornecedorCollectionFornecedorToAttach : cidade.getFornecedorCollection()) {
-                fornecedorCollectionFornecedorToAttach = em.getReference(fornecedorCollectionFornecedorToAttach.getClass(), fornecedorCollectionFornecedorToAttach.getId());
-                attachedFornecedorCollection.add(fornecedorCollectionFornecedorToAttach);
+            Collection<Endereco> attachedEnderecoCollection = new ArrayList<Endereco>();
+            for (Endereco enderecoCollectionEnderecoToAttach : cidade.getEnderecoCollection()) {
+                enderecoCollectionEnderecoToAttach = em.getReference(enderecoCollectionEnderecoToAttach.getClass(), enderecoCollectionEnderecoToAttach.getId());
+                attachedEnderecoCollection.add(enderecoCollectionEnderecoToAttach);
             }
-            cidade.setFornecedorCollection(attachedFornecedorCollection);
+            cidade.setEnderecoCollection(attachedEnderecoCollection);
             em.persist(cidade);
             if (estadoId != null) {
                 estadoId.getCidadeCollection().add(cidade);
                 estadoId = em.merge(estadoId);
             }
-            for (Fornecedor fornecedorCollectionFornecedor : cidade.getFornecedorCollection()) {
-                Cidade oldCidadeIdOfFornecedorCollectionFornecedor = fornecedorCollectionFornecedor.getCidadeId();
-                fornecedorCollectionFornecedor.setCidadeId(cidade);
-                fornecedorCollectionFornecedor = em.merge(fornecedorCollectionFornecedor);
-                if (oldCidadeIdOfFornecedorCollectionFornecedor != null) {
-                    oldCidadeIdOfFornecedorCollectionFornecedor.getFornecedorCollection().remove(fornecedorCollectionFornecedor);
-                    oldCidadeIdOfFornecedorCollectionFornecedor = em.merge(oldCidadeIdOfFornecedorCollectionFornecedor);
+            for (Endereco enderecoCollectionEndereco : cidade.getEnderecoCollection()) {
+                Cidade oldCidadeIdOfEnderecoCollectionEndereco = enderecoCollectionEndereco.getCidadeId();
+                enderecoCollectionEndereco.setCidadeId(cidade);
+                enderecoCollectionEndereco = em.merge(enderecoCollectionEndereco);
+                if (oldCidadeIdOfEnderecoCollectionEndereco != null) {
+                    oldCidadeIdOfEnderecoCollectionEndereco.getEnderecoCollection().remove(enderecoCollectionEndereco);
+                    oldCidadeIdOfEnderecoCollectionEndereco = em.merge(oldCidadeIdOfEnderecoCollectionEndereco);
                 }
             }
         } catch (Exception ex) {
@@ -91,15 +91,15 @@ public class CidadeJpaController implements Serializable {
             Cidade persistentCidade = em.find(Cidade.class, cidade.getId());
             Estado estadoIdOld = persistentCidade.getEstadoId();
             Estado estadoIdNew = cidade.getEstadoId();
-            Collection<Fornecedor> fornecedorCollectionOld = persistentCidade.getFornecedorCollection();
-            Collection<Fornecedor> fornecedorCollectionNew = cidade.getFornecedorCollection();
+            Collection<Endereco> enderecoCollectionOld = persistentCidade.getEnderecoCollection();
+            Collection<Endereco> enderecoCollectionNew = cidade.getEnderecoCollection();
             List<String> illegalOrphanMessages = null;
-            for (Fornecedor fornecedorCollectionOldFornecedor : fornecedorCollectionOld) {
-                if (!fornecedorCollectionNew.contains(fornecedorCollectionOldFornecedor)) {
+            for (Endereco enderecoCollectionOldEndereco : enderecoCollectionOld) {
+                if (!enderecoCollectionNew.contains(enderecoCollectionOldEndereco)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Fornecedor " + fornecedorCollectionOldFornecedor + " since its cidadeId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Endereco " + enderecoCollectionOldEndereco + " since its cidadeId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -109,13 +109,13 @@ public class CidadeJpaController implements Serializable {
                 estadoIdNew = em.getReference(estadoIdNew.getClass(), estadoIdNew.getId());
                 cidade.setEstadoId(estadoIdNew);
             }
-            Collection<Fornecedor> attachedFornecedorCollectionNew = new ArrayList<Fornecedor>();
-            for (Fornecedor fornecedorCollectionNewFornecedorToAttach : fornecedorCollectionNew) {
-                fornecedorCollectionNewFornecedorToAttach = em.getReference(fornecedorCollectionNewFornecedorToAttach.getClass(), fornecedorCollectionNewFornecedorToAttach.getId());
-                attachedFornecedorCollectionNew.add(fornecedorCollectionNewFornecedorToAttach);
+            Collection<Endereco> attachedEnderecoCollectionNew = new ArrayList<Endereco>();
+            for (Endereco enderecoCollectionNewEnderecoToAttach : enderecoCollectionNew) {
+                enderecoCollectionNewEnderecoToAttach = em.getReference(enderecoCollectionNewEnderecoToAttach.getClass(), enderecoCollectionNewEnderecoToAttach.getId());
+                attachedEnderecoCollectionNew.add(enderecoCollectionNewEnderecoToAttach);
             }
-            fornecedorCollectionNew = attachedFornecedorCollectionNew;
-            cidade.setFornecedorCollection(fornecedorCollectionNew);
+            enderecoCollectionNew = attachedEnderecoCollectionNew;
+            cidade.setEnderecoCollection(enderecoCollectionNew);
             cidade = em.merge(cidade);
             if (estadoIdOld != null && !estadoIdOld.equals(estadoIdNew)) {
                 estadoIdOld.getCidadeCollection().remove(cidade);
@@ -125,14 +125,14 @@ public class CidadeJpaController implements Serializable {
                 estadoIdNew.getCidadeCollection().add(cidade);
                 estadoIdNew = em.merge(estadoIdNew);
             }
-            for (Fornecedor fornecedorCollectionNewFornecedor : fornecedorCollectionNew) {
-                if (!fornecedorCollectionOld.contains(fornecedorCollectionNewFornecedor)) {
-                    Cidade oldCidadeIdOfFornecedorCollectionNewFornecedor = fornecedorCollectionNewFornecedor.getCidadeId();
-                    fornecedorCollectionNewFornecedor.setCidadeId(cidade);
-                    fornecedorCollectionNewFornecedor = em.merge(fornecedorCollectionNewFornecedor);
-                    if (oldCidadeIdOfFornecedorCollectionNewFornecedor != null && !oldCidadeIdOfFornecedorCollectionNewFornecedor.equals(cidade)) {
-                        oldCidadeIdOfFornecedorCollectionNewFornecedor.getFornecedorCollection().remove(fornecedorCollectionNewFornecedor);
-                        oldCidadeIdOfFornecedorCollectionNewFornecedor = em.merge(oldCidadeIdOfFornecedorCollectionNewFornecedor);
+            for (Endereco enderecoCollectionNewEndereco : enderecoCollectionNew) {
+                if (!enderecoCollectionOld.contains(enderecoCollectionNewEndereco)) {
+                    Cidade oldCidadeIdOfEnderecoCollectionNewEndereco = enderecoCollectionNewEndereco.getCidadeId();
+                    enderecoCollectionNewEndereco.setCidadeId(cidade);
+                    enderecoCollectionNewEndereco = em.merge(enderecoCollectionNewEndereco);
+                    if (oldCidadeIdOfEnderecoCollectionNewEndereco != null && !oldCidadeIdOfEnderecoCollectionNewEndereco.equals(cidade)) {
+                        oldCidadeIdOfEnderecoCollectionNewEndereco.getEnderecoCollection().remove(enderecoCollectionNewEndereco);
+                        oldCidadeIdOfEnderecoCollectionNewEndereco = em.merge(oldCidadeIdOfEnderecoCollectionNewEndereco);
                     }
                 }
             }
@@ -164,12 +164,12 @@ public class CidadeJpaController implements Serializable {
                 throw new NonexistentEntityException("The cidade with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Fornecedor> fornecedorCollectionOrphanCheck = cidade.getFornecedorCollection();
-            for (Fornecedor fornecedorCollectionOrphanCheckFornecedor : fornecedorCollectionOrphanCheck) {
+            Collection<Endereco> enderecoCollectionOrphanCheck = cidade.getEnderecoCollection();
+            for (Endereco enderecoCollectionOrphanCheckEndereco : enderecoCollectionOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Cidade (" + cidade + ") cannot be destroyed since the Fornecedor " + fornecedorCollectionOrphanCheckFornecedor + " in its fornecedorCollection field has a non-nullable cidadeId field.");
+                illegalOrphanMessages.add("This Cidade (" + cidade + ") cannot be destroyed since the Endereco " + enderecoCollectionOrphanCheckEndereco + " in its enderecoCollection field has a non-nullable cidadeId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
@@ -193,10 +193,6 @@ public class CidadeJpaController implements Serializable {
         return findCidadeEntities(true, -1, -1);
     }
 
-    public List<Cidade> findCidadeEntitiesByEstadoId(int estadoId) {
-        return findCidadeEntitiesByEstadoId(estadoId, true, -1, -1);
-    }
-
     public List<Cidade> findCidadeEntities(int maxResults, int firstResult) {
         return findCidadeEntities(false, maxResults, firstResult);
     }
@@ -215,28 +211,6 @@ public class CidadeJpaController implements Serializable {
         } finally {
             em.close();
         }
-    }
-
-    public List<Cidade> findCidadeEntitiesByEstadoId(int estadoId, boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Cidade.class));
-            Query q = em.createQuery(cq);
-
-            return q.getResultList();
-        } finally {
-            em.close();
-        }
-
-  //      EntityManager em = getEntityManager();
-    //    try {
-    //        TypedQuery<Cidade> query = em.createQuery("select p from Produto p where p.codigo = :codigo", Cidade.class);
-    //        query.setParameter("id", estadoId);
-     //       return List<Cidade> query.getMaxResults();
-      //  } finally {
-       //     em.close();
-     //   }
     }
 
     public Cidade findCidade(Integer id) {
@@ -260,5 +234,5 @@ public class CidadeJpaController implements Serializable {
             em.close();
         }
     }
-
+    
 }

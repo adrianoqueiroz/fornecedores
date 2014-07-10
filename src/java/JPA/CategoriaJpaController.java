@@ -10,6 +10,8 @@ import JPA.exceptions.NonexistentEntityException;
 import JPA.exceptions.PreexistingEntityException;
 import JPA.exceptions.RollbackFailureException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -29,27 +31,29 @@ import model.Fornecedor;
  */
 @Stateless
 public class CategoriaJpaController implements Serializable {
-
     @PersistenceUnit(unitName = "fornecedoresPU") //inject from your application server
     private EntityManagerFactory emf;
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }   
     
-
     public void create(Categoria categoria) throws PreexistingEntityException, RollbackFailureException, Exception {
+        if (categoria.getFornecedorCollection() == null) {
+            categoria.setFornecedorCollection(new ArrayList<Fornecedor>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
-            Fornecedor fornecedorId = categoria.getFornecedorId();
-            if (fornecedorId != null) {
-                fornecedorId = em.getReference(fornecedorId.getClass(), fornecedorId.getId());
-                categoria.setFornecedorId(fornecedorId);
+            Collection<Fornecedor> attachedFornecedorCollection = new ArrayList<Fornecedor>();
+            for (Fornecedor fornecedorCollectionFornecedorToAttach : categoria.getFornecedorCollection()) {
+                fornecedorCollectionFornecedorToAttach = em.getReference(fornecedorCollectionFornecedorToAttach.getClass(), fornecedorCollectionFornecedorToAttach.getId());
+                attachedFornecedorCollection.add(fornecedorCollectionFornecedorToAttach);
             }
+            categoria.setFornecedorCollection(attachedFornecedorCollection);
             em.persist(categoria);
-            if (fornecedorId != null) {
-                fornecedorId.getCategoriaCollection().add(categoria);
-                fornecedorId = em.merge(fornecedorId);
+            for (Fornecedor fornecedorCollectionFornecedor : categoria.getFornecedorCollection()) {
+                fornecedorCollectionFornecedor.getCategoriaCollection().add(categoria);
+                fornecedorCollectionFornecedor = em.merge(fornecedorCollectionFornecedor);
             }
         } catch (Exception ex) {
             if (findCategoria(categoria.getId()) != null) {
@@ -68,20 +72,27 @@ public class CategoriaJpaController implements Serializable {
         try {
             em = getEntityManager();
             Categoria persistentCategoria = em.find(Categoria.class, categoria.getId());
-            Fornecedor fornecedorIdOld = persistentCategoria.getFornecedorId();
-            Fornecedor fornecedorIdNew = categoria.getFornecedorId();
-            if (fornecedorIdNew != null) {
-                fornecedorIdNew = em.getReference(fornecedorIdNew.getClass(), fornecedorIdNew.getId());
-                categoria.setFornecedorId(fornecedorIdNew);
+            Collection<Fornecedor> fornecedorCollectionOld = persistentCategoria.getFornecedorCollection();
+            Collection<Fornecedor> fornecedorCollectionNew = categoria.getFornecedorCollection();
+            Collection<Fornecedor> attachedFornecedorCollectionNew = new ArrayList<Fornecedor>();
+            for (Fornecedor fornecedorCollectionNewFornecedorToAttach : fornecedorCollectionNew) {
+                fornecedorCollectionNewFornecedorToAttach = em.getReference(fornecedorCollectionNewFornecedorToAttach.getClass(), fornecedorCollectionNewFornecedorToAttach.getId());
+                attachedFornecedorCollectionNew.add(fornecedorCollectionNewFornecedorToAttach);
             }
+            fornecedorCollectionNew = attachedFornecedorCollectionNew;
+            categoria.setFornecedorCollection(fornecedorCollectionNew);
             categoria = em.merge(categoria);
-            if (fornecedorIdOld != null && !fornecedorIdOld.equals(fornecedorIdNew)) {
-                fornecedorIdOld.getCategoriaCollection().remove(categoria);
-                fornecedorIdOld = em.merge(fornecedorIdOld);
+            for (Fornecedor fornecedorCollectionOldFornecedor : fornecedorCollectionOld) {
+                if (!fornecedorCollectionNew.contains(fornecedorCollectionOldFornecedor)) {
+                    fornecedorCollectionOldFornecedor.getCategoriaCollection().remove(categoria);
+                    fornecedorCollectionOldFornecedor = em.merge(fornecedorCollectionOldFornecedor);
+                }
             }
-            if (fornecedorIdNew != null && !fornecedorIdNew.equals(fornecedorIdOld)) {
-                fornecedorIdNew.getCategoriaCollection().add(categoria);
-                fornecedorIdNew = em.merge(fornecedorIdNew);
+            for (Fornecedor fornecedorCollectionNewFornecedor : fornecedorCollectionNew) {
+                if (!fornecedorCollectionOld.contains(fornecedorCollectionNewFornecedor)) {
+                    fornecedorCollectionNewFornecedor.getCategoriaCollection().add(categoria);
+                    fornecedorCollectionNewFornecedor = em.merge(fornecedorCollectionNewFornecedor);
+                }
             }
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -110,10 +121,10 @@ public class CategoriaJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The categoria with id " + id + " no longer exists.", enfe);
             }
-            Fornecedor fornecedorId = categoria.getFornecedorId();
-            if (fornecedorId != null) {
-                fornecedorId.getCategoriaCollection().remove(categoria);
-                fornecedorId = em.merge(fornecedorId);
+            Collection<Fornecedor> fornecedorCollection = categoria.getFornecedorCollection();
+            for (Fornecedor fornecedorCollectionFornecedor : fornecedorCollection) {
+                fornecedorCollectionFornecedor.getCategoriaCollection().remove(categoria);
+                fornecedorCollectionFornecedor = em.merge(fornecedorCollectionFornecedor);
             }
             em.remove(categoria);
         } catch (Exception ex) {

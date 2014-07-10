@@ -11,38 +11,35 @@ import JPA.exceptions.NonexistentEntityException;
 import JPA.exceptions.PreexistingEntityException;
 import JPA.exceptions.RollbackFailureException;
 import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import model.Cidade;
-import model.Categoria;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
+import model.Categoria;
 import model.Contato;
+import model.Endereco;
 import model.Fornecedor;
 
 /**
  *
  * @author Adriano
  */
+@Stateless
 public class FornecedorJpaController implements Serializable {
-
-    public FornecedorJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
-        this.emf = emf;
-    }
-    private UserTransaction utx = null;
-    private EntityManagerFactory emf = null;
-
+    @PersistenceUnit(unitName = "fornecedoresPU") //inject from your application server
+    private EntityManagerFactory emf;
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
-    }
-
+    }   
+    
     public void create(Fornecedor fornecedor) throws PreexistingEntityException, RollbackFailureException, Exception {
         if (fornecedor.getCategoriaCollection() == null) {
             fornecedor.setCategoriaCollection(new ArrayList<Categoria>());
@@ -52,12 +49,11 @@ public class FornecedorJpaController implements Serializable {
         }
         EntityManager em = null;
         try {
-            utx.begin();
             em = getEntityManager();
-            Cidade cidadeId = fornecedor.getCidadeId();
-            if (cidadeId != null) {
-                cidadeId = em.getReference(cidadeId.getClass(), cidadeId.getId());
-                fornecedor.setCidadeId(cidadeId);
+            Endereco enderecoId = fornecedor.getEnderecoId();
+            if (enderecoId != null) {
+                enderecoId = em.getReference(enderecoId.getClass(), enderecoId.getId());
+                fornecedor.setEnderecoId(enderecoId);
             }
             Collection<Categoria> attachedCategoriaCollection = new ArrayList<Categoria>();
             for (Categoria categoriaCollectionCategoriaToAttach : fornecedor.getCategoriaCollection()) {
@@ -72,18 +68,13 @@ public class FornecedorJpaController implements Serializable {
             }
             fornecedor.setContatoCollection(attachedContatoCollection);
             em.persist(fornecedor);
-            if (cidadeId != null) {
-                cidadeId.getFornecedorCollection().add(fornecedor);
-                cidadeId = em.merge(cidadeId);
+            if (enderecoId != null) {
+                enderecoId.getFornecedorCollection().add(fornecedor);
+                enderecoId = em.merge(enderecoId);
             }
             for (Categoria categoriaCollectionCategoria : fornecedor.getCategoriaCollection()) {
-                Fornecedor oldFornecedorIdOfCategoriaCollectionCategoria = categoriaCollectionCategoria.getFornecedorId();
-                categoriaCollectionCategoria.setFornecedorId(fornecedor);
+                categoriaCollectionCategoria.getFornecedorCollection().add(fornecedor);
                 categoriaCollectionCategoria = em.merge(categoriaCollectionCategoria);
-                if (oldFornecedorIdOfCategoriaCollectionCategoria != null) {
-                    oldFornecedorIdOfCategoriaCollectionCategoria.getCategoriaCollection().remove(categoriaCollectionCategoria);
-                    oldFornecedorIdOfCategoriaCollectionCategoria = em.merge(oldFornecedorIdOfCategoriaCollectionCategoria);
-                }
             }
             for (Contato contatoCollectionContato : fornecedor.getContatoCollection()) {
                 Fornecedor oldFornecedorIdOfContatoCollectionContato = contatoCollectionContato.getFornecedorId();
@@ -94,13 +85,7 @@ public class FornecedorJpaController implements Serializable {
                     oldFornecedorIdOfContatoCollectionContato = em.merge(oldFornecedorIdOfContatoCollectionContato);
                 }
             }
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
             if (findFornecedor(fornecedor.getId()) != null) {
                 throw new PreexistingEntityException("Fornecedor " + fornecedor + " already exists.", ex);
             }
@@ -115,24 +100,15 @@ public class FornecedorJpaController implements Serializable {
     public void edit(Fornecedor fornecedor) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            utx.begin();
             em = getEntityManager();
             Fornecedor persistentFornecedor = em.find(Fornecedor.class, fornecedor.getId());
-            Cidade cidadeIdOld = persistentFornecedor.getCidadeId();
-            Cidade cidadeIdNew = fornecedor.getCidadeId();
+            Endereco enderecoIdOld = persistentFornecedor.getEnderecoId();
+            Endereco enderecoIdNew = fornecedor.getEnderecoId();
             Collection<Categoria> categoriaCollectionOld = persistentFornecedor.getCategoriaCollection();
             Collection<Categoria> categoriaCollectionNew = fornecedor.getCategoriaCollection();
             Collection<Contato> contatoCollectionOld = persistentFornecedor.getContatoCollection();
             Collection<Contato> contatoCollectionNew = fornecedor.getContatoCollection();
             List<String> illegalOrphanMessages = null;
-            for (Categoria categoriaCollectionOldCategoria : categoriaCollectionOld) {
-                if (!categoriaCollectionNew.contains(categoriaCollectionOldCategoria)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Categoria " + categoriaCollectionOldCategoria + " since its fornecedorId field is not nullable.");
-                }
-            }
             for (Contato contatoCollectionOldContato : contatoCollectionOld) {
                 if (!contatoCollectionNew.contains(contatoCollectionOldContato)) {
                     if (illegalOrphanMessages == null) {
@@ -144,9 +120,9 @@ public class FornecedorJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (cidadeIdNew != null) {
-                cidadeIdNew = em.getReference(cidadeIdNew.getClass(), cidadeIdNew.getId());
-                fornecedor.setCidadeId(cidadeIdNew);
+            if (enderecoIdNew != null) {
+                enderecoIdNew = em.getReference(enderecoIdNew.getClass(), enderecoIdNew.getId());
+                fornecedor.setEnderecoId(enderecoIdNew);
             }
             Collection<Categoria> attachedCategoriaCollectionNew = new ArrayList<Categoria>();
             for (Categoria categoriaCollectionNewCategoriaToAttach : categoriaCollectionNew) {
@@ -163,23 +139,24 @@ public class FornecedorJpaController implements Serializable {
             contatoCollectionNew = attachedContatoCollectionNew;
             fornecedor.setContatoCollection(contatoCollectionNew);
             fornecedor = em.merge(fornecedor);
-            if (cidadeIdOld != null && !cidadeIdOld.equals(cidadeIdNew)) {
-                cidadeIdOld.getFornecedorCollection().remove(fornecedor);
-                cidadeIdOld = em.merge(cidadeIdOld);
+            if (enderecoIdOld != null && !enderecoIdOld.equals(enderecoIdNew)) {
+                enderecoIdOld.getFornecedorCollection().remove(fornecedor);
+                enderecoIdOld = em.merge(enderecoIdOld);
             }
-            if (cidadeIdNew != null && !cidadeIdNew.equals(cidadeIdOld)) {
-                cidadeIdNew.getFornecedorCollection().add(fornecedor);
-                cidadeIdNew = em.merge(cidadeIdNew);
+            if (enderecoIdNew != null && !enderecoIdNew.equals(enderecoIdOld)) {
+                enderecoIdNew.getFornecedorCollection().add(fornecedor);
+                enderecoIdNew = em.merge(enderecoIdNew);
+            }
+            for (Categoria categoriaCollectionOldCategoria : categoriaCollectionOld) {
+                if (!categoriaCollectionNew.contains(categoriaCollectionOldCategoria)) {
+                    categoriaCollectionOldCategoria.getFornecedorCollection().remove(fornecedor);
+                    categoriaCollectionOldCategoria = em.merge(categoriaCollectionOldCategoria);
+                }
             }
             for (Categoria categoriaCollectionNewCategoria : categoriaCollectionNew) {
                 if (!categoriaCollectionOld.contains(categoriaCollectionNewCategoria)) {
-                    Fornecedor oldFornecedorIdOfCategoriaCollectionNewCategoria = categoriaCollectionNewCategoria.getFornecedorId();
-                    categoriaCollectionNewCategoria.setFornecedorId(fornecedor);
+                    categoriaCollectionNewCategoria.getFornecedorCollection().add(fornecedor);
                     categoriaCollectionNewCategoria = em.merge(categoriaCollectionNewCategoria);
-                    if (oldFornecedorIdOfCategoriaCollectionNewCategoria != null && !oldFornecedorIdOfCategoriaCollectionNewCategoria.equals(fornecedor)) {
-                        oldFornecedorIdOfCategoriaCollectionNewCategoria.getCategoriaCollection().remove(categoriaCollectionNewCategoria);
-                        oldFornecedorIdOfCategoriaCollectionNewCategoria = em.merge(oldFornecedorIdOfCategoriaCollectionNewCategoria);
-                    }
                 }
             }
             for (Contato contatoCollectionNewContato : contatoCollectionNew) {
@@ -193,13 +170,7 @@ public class FornecedorJpaController implements Serializable {
                     }
                 }
             }
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = fornecedor.getId();
@@ -218,7 +189,6 @@ public class FornecedorJpaController implements Serializable {
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            utx.begin();
             em = getEntityManager();
             Fornecedor fornecedor;
             try {
@@ -228,13 +198,6 @@ public class FornecedorJpaController implements Serializable {
                 throw new NonexistentEntityException("The fornecedor with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Categoria> categoriaCollectionOrphanCheck = fornecedor.getCategoriaCollection();
-            for (Categoria categoriaCollectionOrphanCheckCategoria : categoriaCollectionOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Fornecedor (" + fornecedor + ") cannot be destroyed since the Categoria " + categoriaCollectionOrphanCheckCategoria + " in its categoriaCollection field has a non-nullable fornecedorId field.");
-            }
             Collection<Contato> contatoCollectionOrphanCheck = fornecedor.getContatoCollection();
             for (Contato contatoCollectionOrphanCheckContato : contatoCollectionOrphanCheck) {
                 if (illegalOrphanMessages == null) {
@@ -245,19 +208,18 @@ public class FornecedorJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Cidade cidadeId = fornecedor.getCidadeId();
-            if (cidadeId != null) {
-                cidadeId.getFornecedorCollection().remove(fornecedor);
-                cidadeId = em.merge(cidadeId);
+            Endereco enderecoId = fornecedor.getEnderecoId();
+            if (enderecoId != null) {
+                enderecoId.getFornecedorCollection().remove(fornecedor);
+                enderecoId = em.merge(enderecoId);
+            }
+            Collection<Categoria> categoriaCollection = fornecedor.getCategoriaCollection();
+            for (Categoria categoriaCollectionCategoria : categoriaCollection) {
+                categoriaCollectionCategoria.getFornecedorCollection().remove(fornecedor);
+                categoriaCollectionCategoria = em.merge(categoriaCollectionCategoria);
             }
             em.remove(fornecedor);
-            utx.commit();
         } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
             throw ex;
         } finally {
             if (em != null) {

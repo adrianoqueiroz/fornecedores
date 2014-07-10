@@ -7,18 +7,21 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -41,9 +44,11 @@ public class Categoria implements Serializable {
     @Size(max = 45)
     @Column(name = "nome")
     private String nome;
-    @JoinColumn(name = "fornecedor_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Fornecedor fornecedorId;
+    @JoinTable(name = "fornecedor_has_categoria", joinColumns = {
+        @JoinColumn(name = "categoria_id", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "fornecedor_id", referencedColumnName = "id")})
+    @ManyToMany
+    private Collection<Fornecedor> fornecedorCollection;
 
     public Categoria() {
     }
@@ -68,12 +73,13 @@ public class Categoria implements Serializable {
         this.nome = nome;
     }
 
-    public Fornecedor getFornecedorId() {
-        return fornecedorId;
+    @XmlTransient
+    public Collection<Fornecedor> getFornecedorCollection() {
+        return fornecedorCollection;
     }
 
-    public void setFornecedorId(Fornecedor fornecedorId) {
-        this.fornecedorId = fornecedorId;
+    public void setFornecedorCollection(Collection<Fornecedor> fornecedorCollection) {
+        this.fornecedorCollection = fornecedorCollection;
     }
 
     @Override

@@ -44,10 +44,10 @@ public class Contato implements Serializable {
     @Size(max = 45)
     @Column(name = "nome")
     private String nome;
-    @Size(max = 45)
+    @Size(max = 14)
     @Column(name = "telefone")
     private String telefone;
-    @Size(max = 45)
+    @Size(max = 14)
     @Column(name = "celular")
     private String celular;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation

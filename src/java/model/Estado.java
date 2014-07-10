@@ -41,7 +41,7 @@ public class Estado implements Serializable {
     @NotNull
     @Column(name = "id")
     private Integer id;
-    @Size(max = 45)
+    @Size(max = 4)
     @Column(name = "sigla")
     private String sigla;
     @Size(max = 45)

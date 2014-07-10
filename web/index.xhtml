@@ -70,31 +70,15 @@
 
                     <p:row>
                         <p:column>
-                            <p:outputLabel for="categoria01" value="Categoria 01" />
-                        </p:column>
-                        <p:column>
-                            <p:selectOneMenu id="categoria01" style="width:195px;">
-                                <f:selectItem itemLabel="Selecione..." />
+                            <p:selectCheckboxMenu id="categoria02" filter="true" value="#{fornecedoresBean.categoriasSelecionadas}" label="Categorias" >
                                 <f:selectItems value="#{fornecedoresBean.selectItemCategorias}" />
-                            </p:selectOneMenu>
+                                <p:ajax event="change" update=":fornecedoresForm:categoriasSelecionadas"/>
+                            </p:selectCheckboxMenu>
                         </p:column>
-
-                        <p:column>
-                            <p:outputLabel for="categoria02" value="Categoria 02" />
-                        </p:column>
-                        <p:column>
-                            <p:selectOneMenu id="categoria02" style="width:195px;">
-                                <f:selectItem itemLabel="Selecione..."/>
-                            </p:selectOneMenu>
-                        </p:column>
-
-                        <p:column>
-                            <p:outputLabel for="categoria03" value="Categoria 03" />
-                        </p:column>
-                        <p:column>
-                            <p:selectOneMenu id="categoria03" style="width:195px;">
-                                <f:selectItem itemLabel="Selecione..."/>
-                            </p:selectOneMenu>
+                        <p:column colspan="5">
+                            <p:autoComplete id="categoriasSelecionadas" readonly="true" multiple="true" value="#{fornecedoresBean.selectItemCategorias}" 
+                                            var="categ" itemLabel="#{categ.label}" itemValue="#{categ}">
+                            </p:autoComplete>
                         </p:column>
                     </p:row>
 
@@ -104,8 +88,8 @@
                         </p:column>
                         <p:column>
                             <p:rating id="qualificacao" value="#{fornecedoresBean.fornecedor.qualificacao}">
-                                <p:ajax event="rate" listener="#{ratingView.onrate}" update="messages" />
-                                <p:ajax event="cancel" listener="#{ratingView.oncancel}" update="messages" />
+                                <p:ajax event="rate" listener="#{fornecedoresBean.onrate}" update="messages" />
+                                <p:ajax event="cancel" listener="#{fornecedoresBean.oncancel}" update="messages" />
                             </p:rating>
                         </p:column>
                         <p:column>
