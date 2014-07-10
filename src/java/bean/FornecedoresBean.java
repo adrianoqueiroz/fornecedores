@@ -32,7 +32,7 @@ public class FornecedoresBean {
 
     private int cidadeSelecionada;
 
-    private SelectItem[] categoriasSelecionadas;
+    private List<String> categoriasSelecionadas = new ArrayList<>();
 
     public Fornecedor getFornecedor() {
         return fornecedor;
@@ -58,12 +58,22 @@ public class FornecedoresBean {
         this.cidadeSelecionada = cidadeSelecionada;
     }
 
-    public SelectItem[] getCategoriasSelecionadas() {
+    public List<String> getCategoriasSelecionadas() {
         return categoriasSelecionadas;
     }
 
-    public void setCategoriasSelecionadas(SelectItem[] categoriasSelecionadas) {
+    public void setCategoriasSelecionadas(List<String> categoriasSelecionadas) {
         this.categoriasSelecionadas = categoriasSelecionadas;
+    }
+
+    public List<String> getListaCategorias() {
+        List<Categoria> listaCategorias = categoriaJpaController.findCategoriaEntities();
+        List<String> lista = new ArrayList<>(listaCategorias.size());
+
+        for (Categoria c : listaCategorias) {
+            lista.add(c.getNome());
+        }
+        return lista;
     }
 
     public List<SelectItem> getSelectItemCategorias() {

@@ -7,7 +7,14 @@
     <h:head>
         <title>Sistema de Controle de Fornecedores</title>
         <link rel="stylesheet" type="text/css" href="css/index.css"/>
+
+        <style>
+            .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header .ui-chkbox-box{
+                display: none;
+            }
+        </style>
     </h:head>
+    
     <h:body style="background-image:url('imagens/bg_site.jpg'); background-repeat: repeat-x;">
 
 
@@ -71,13 +78,13 @@
                     <p:row>
                         <p:column>
                             <p:selectCheckboxMenu id="categoria02" filter="true" value="#{fornecedoresBean.categoriasSelecionadas}" label="Categorias" >
-                                <f:selectItems value="#{fornecedoresBean.selectItemCategorias}" />
+                                <f:selectItems value="#{fornecedoresBean.listaCategorias}" />
                                 <p:ajax event="change" update=":fornecedoresForm:categoriasSelecionadas"/>
                             </p:selectCheckboxMenu>
                         </p:column>
                         <p:column colspan="5">
-                            <p:autoComplete id="categoriasSelecionadas" readonly="true" multiple="true" value="#{fornecedoresBean.selectItemCategorias}" 
-                                            var="categ" itemLabel="#{categ.label}" itemValue="#{categ}">
+                            <p:autoComplete style="width: 100px" id="categoriasSelecionadas" readonly="true" multiple="true" value="#{fornecedoresBean.categoriasSelecionadas}" 
+                                            var="categ" itemLabel="#{categ}" itemValue="#{categ}">
                             </p:autoComplete>
                         </p:column>
                     </p:row>
