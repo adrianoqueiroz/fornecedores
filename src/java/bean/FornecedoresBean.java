@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import model.Categoria;
@@ -18,6 +19,7 @@ import model.Fornecedor;
 import org.primefaces.event.RateEvent;
 
 @ManagedBean
+@ViewScoped
 public class FornecedoresBean {
 
     @EJB
@@ -102,13 +104,12 @@ public class FornecedoresBean {
     }
 
     public List<SelectItem> getSelectItemCidades() {
-        List<Cidade> listaCidades = cidadeJpaController.findCidadeEntities();
+        List<Cidade> listaCidades = cidadeJpaController.findCidadeByEstado(estadoSelecionado);
         List<SelectItem> itens = new ArrayList<>(listaCidades.size());
 
         for (Cidade c : listaCidades) {
-            if (estadoSelecionado == c.getEstadoId().getId()) {
-                itens.add(new SelectItem(c.getId(), c.getNome()));
-            }
+            itens.add(new SelectItem(c.getId(), c.getNome()));
+
         }
         return itens;
     }
@@ -124,7 +125,11 @@ public class FornecedoresBean {
     }
 
     public void salvar() throws Exception {
-        Cidade cidade = cidadeJpaController.findCidade(cidadeSelecionada);
-        fornecedorJpaController.create(fornecedor);
+        if (cidadeSelecionada != 0) {
+            Cidade cidade = cidadeJpaController.findCidade(cidadeSelecionada);
+            fornecedor.getEnderecoId().setCidadeId(cidade);
+            
+            fornecedorJpaController.create(fornecedor);
+        }
     }
 }

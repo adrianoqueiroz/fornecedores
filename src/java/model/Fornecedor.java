@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package model;
 
 import java.io.Serializable;
@@ -12,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -43,10 +44,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Fornecedor.findByInscMunicipal", query = "SELECT f FROM Fornecedor f WHERE f.inscMunicipal = :inscMunicipal"),
     @NamedQuery(name = "Fornecedor.findByQualificacao", query = "SELECT f FROM Fornecedor f WHERE f.qualificacao = :qualificacao")})
 public class Fornecedor implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Integer id;
     @Size(max = 45)
@@ -79,6 +80,7 @@ public class Fornecedor implements Serializable {
     private Collection<Contato> contatoCollection;
 
     public Fornecedor() {
+        enderecoId = new Endereco();
     }
 
     public Fornecedor(Integer id) {
@@ -199,5 +201,5 @@ public class Fornecedor implements Serializable {
     public String toString() {
         return "model.Fornecedor[ id=" + id + " ]";
     }
-    
+
 }

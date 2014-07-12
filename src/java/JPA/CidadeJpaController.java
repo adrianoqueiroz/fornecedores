@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package JPA;
 
 import JPA.exceptions.IllegalOrphanException;
@@ -20,6 +19,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
@@ -36,9 +36,10 @@ public class CidadeJpaController implements Serializable {
 
     @PersistenceUnit(unitName = "fornecedoresPU") //inject from your application server
     private EntityManagerFactory emf;
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
-    }   
+    }
 
     public void create(Cidade cidade) throws PreexistingEntityException, RollbackFailureException, Exception {
         if (cidade.getEnderecoCollection() == null) {
@@ -213,6 +214,17 @@ public class CidadeJpaController implements Serializable {
         }
     }
 
+    public List<Cidade> findCidadeByEstado(int id) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("select c from Cidade c where c.estadoId.id = :id", Cidade.class);
+            query.setParameter("id", id);
+            return new ArrayList<>(query.getResultList());
+        } finally {
+            em.close();
+        }
+    }
+
     public Cidade findCidade(Integer id) {
         EntityManager em = getEntityManager();
         try {
@@ -234,5 +246,5 @@ public class CidadeJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }
