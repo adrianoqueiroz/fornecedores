@@ -7,7 +7,6 @@
 package JPA;
 
 import JPA.exceptions.NonexistentEntityException;
-import JPA.exceptions.PreexistingEntityException;
 import JPA.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import java.util.List;
@@ -28,21 +27,19 @@ import model.Usuario;
  */
 @Stateless
 public class UsuarioJpaController implements Serializable {
+
     @PersistenceUnit(unitName = "fornecedoresPU") //inject from your application server
     private EntityManagerFactory emf;
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
-    }   
-
-    public void create(Usuario usuario) throws PreexistingEntityException, RollbackFailureException, Exception {
+    }  
+    
+    public void create(Usuario usuario) throws RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.persist(usuario);
         } catch (Exception ex) {
-            if (findUsuario(usuario.getId()) != null) {
-                throw new PreexistingEntityException("Usuario " + usuario + " already exists.", ex);
-            }
             throw ex;
         } finally {
             if (em != null) {

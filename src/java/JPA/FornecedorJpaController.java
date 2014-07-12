@@ -8,7 +8,6 @@ package JPA;
 
 import JPA.exceptions.IllegalOrphanException;
 import JPA.exceptions.NonexistentEntityException;
-import JPA.exceptions.PreexistingEntityException;
 import JPA.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -38,9 +37,9 @@ public class FornecedorJpaController implements Serializable {
     private EntityManagerFactory emf;
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
-    }   
-    
-    public void create(Fornecedor fornecedor) throws PreexistingEntityException, RollbackFailureException, Exception {
+    }  
+
+    public void create(Fornecedor fornecedor) throws RollbackFailureException, Exception {
         if (fornecedor.getCategoriaCollection() == null) {
             fornecedor.setCategoriaCollection(new ArrayList<Categoria>());
         }
@@ -86,9 +85,6 @@ public class FornecedorJpaController implements Serializable {
                 }
             }
         } catch (Exception ex) {
-            if (findFornecedor(fornecedor.getId()) != null) {
-                throw new PreexistingEntityException("Fornecedor " + fornecedor + " already exists.", ex);
-            }
             throw ex;
         } finally {
             if (em != null) {

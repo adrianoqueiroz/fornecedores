@@ -7,7 +7,6 @@
 package JPA;
 
 import JPA.exceptions.NonexistentEntityException;
-import JPA.exceptions.PreexistingEntityException;
 import JPA.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
@@ -37,7 +37,7 @@ public class CategoriaJpaController implements Serializable {
         return emf.createEntityManager();
     }   
     
-    public void create(Categoria categoria) throws PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(Categoria categoria) throws RollbackFailureException, Exception {
         if (categoria.getFornecedorCollection() == null) {
             categoria.setFornecedorCollection(new ArrayList<Fornecedor>());
         }
@@ -56,9 +56,6 @@ public class CategoriaJpaController implements Serializable {
                 fornecedorCollectionFornecedor = em.merge(fornecedorCollectionFornecedor);
             }
         } catch (Exception ex) {
-            if (findCategoria(categoria.getId()) != null) {
-                throw new PreexistingEntityException("Categoria " + categoria + " already exists.", ex);
-            }
             throw ex;
         } finally {
             if (em != null) {
@@ -169,6 +166,17 @@ public class CategoriaJpaController implements Serializable {
         }
     }
 
+        public Categoria findCategoriaByNome(String nome) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Categoria> query = em.createQuery("select c from Categoria c where c.nome = :nome", Categoria.class);
+            query.setParameter("nome", nome);
+            return (Categoria) query.getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+        
     public int getCategoriaCount() {
         EntityManager em = getEntityManager();
         try {

@@ -32,11 +32,12 @@ import model.Estado;
  */
 @Stateless
 public class EstadoJpaController implements Serializable {
+
     @PersistenceUnit(unitName = "fornecedoresPU") //inject from your application server
     private EntityManagerFactory emf;
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
-    }   
+    }  
 
     public void create(Estado estado) throws PreexistingEntityException, RollbackFailureException, Exception {
         if (estado.getCidadeCollection() == null) {

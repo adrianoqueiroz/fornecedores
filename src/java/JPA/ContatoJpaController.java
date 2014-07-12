@@ -7,7 +7,6 @@
 package JPA;
 
 import JPA.exceptions.NonexistentEntityException;
-import JPA.exceptions.PreexistingEntityException;
 import JPA.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import java.util.List;
@@ -34,9 +33,9 @@ public class ContatoJpaController implements Serializable {
     private EntityManagerFactory emf;
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
-    }   
-
-    public void create(Contato contato) throws PreexistingEntityException, RollbackFailureException, Exception {
+    }  
+    
+    public void create(Contato contato) throws RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -51,9 +50,6 @@ public class ContatoJpaController implements Serializable {
                 fornecedorId = em.merge(fornecedorId);
             }
         } catch (Exception ex) {
-            if (findContato(contato.getId()) != null) {
-                throw new PreexistingEntityException("Contato " + contato + " already exists.", ex);
-            }
             throw ex;
         } finally {
             if (em != null) {

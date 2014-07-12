@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package JPA;
 
 import JPA.exceptions.IllegalOrphanException;
@@ -19,7 +20,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
@@ -246,5 +246,5 @@ public class CidadeJpaController implements Serializable {
             em.close();
         }
     }
-
+    
 }

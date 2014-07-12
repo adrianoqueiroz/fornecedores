@@ -8,7 +8,6 @@ package JPA;
 
 import JPA.exceptions.IllegalOrphanException;
 import JPA.exceptions.NonexistentEntityException;
-import JPA.exceptions.PreexistingEntityException;
 import JPA.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,14 +32,13 @@ import model.Fornecedor;
  */
 @Stateless
 public class EnderecoJpaController implements Serializable {
-    
     @PersistenceUnit(unitName = "fornecedoresPU") //inject from your application server
     private EntityManagerFactory emf;
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
-    }   
-
-    public void create(Endereco endereco) throws PreexistingEntityException, RollbackFailureException, Exception {
+    }  
+    
+    public void create(Endereco endereco) throws RollbackFailureException, Exception {
         if (endereco.getFornecedorCollection() == null) {
             endereco.setFornecedorCollection(new ArrayList<Fornecedor>());
         }
@@ -73,9 +71,6 @@ public class EnderecoJpaController implements Serializable {
                 }
             }
         } catch (Exception ex) {
-            if (findEndereco(endereco.getId()) != null) {
-                throw new PreexistingEntityException("Endereco " + endereco + " already exists.", ex);
-            }
             throw ex;
         } finally {
             if (em != null) {

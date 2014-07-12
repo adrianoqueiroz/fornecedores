@@ -37,7 +37,8 @@ public class FornecedoresBean {
 
     private int cidadeSelecionada;
 
-    private List<String> categoriasSelecionadas = new ArrayList<>();
+    private List<String> categoriasNome;
+    private List<String> categoriasSelecionadasNome;
 
     public Fornecedor getFornecedor() {
         return fornecedor;
@@ -63,32 +64,36 @@ public class FornecedoresBean {
         this.cidadeSelecionada = cidadeSelecionada;
     }
 
-    public List<String> getCategoriasSelecionadas() {
-        return categoriasSelecionadas;
+    public List<String> getCategoriasSelecionadasNome() {
+        return categoriasSelecionadasNome;
     }
 
-    public void setCategoriasSelecionadas(List<String> categoriasSelecionadas) {
-        this.categoriasSelecionadas = categoriasSelecionadas;
+    public void setCategoriasSelecionadasNome(List<String> categoriasSelecionadasNome) {
+        this.categoriasSelecionadasNome = categoriasSelecionadasNome;
     }
 
-    public List<String> getListaCategorias() {
-        List<Categoria> listaCategorias = categoriaJpaController.findCategoriaEntities();
-        List<String> lista = new ArrayList<>(listaCategorias.size());
-
-        for (Categoria c : listaCategorias) {
-            lista.add(c.getNome());
+    public List<String> getCategoriasNome() {
+        List<Categoria> categorias = categoriaJpaController.findCategoriaEntities();
+        categoriasNome = new ArrayList<>(categorias.size());
+        for (Categoria c : categorias) {
+            categoriasNome.add(c.getNome());
         }
-        return lista;
+
+        return categoriasNome;
     }
 
-    public List<SelectItem> getSelectItemCategorias() {
-        List<Categoria> listaCategorias = categoriaJpaController.findCategoriaEntities();
-        List<SelectItem> itens = new ArrayList<>(listaCategorias.size());
+    public void setCategoriasNome(List<String> categoriasNome) {
+        this.categoriasNome = categoriasNome;
+    }
 
-        for (Categoria c : listaCategorias) {
-            itens.add(new SelectItem(c.getId(), c.getNome()));
+    public List<String> getListaCategoriasNome() {
+        List<Categoria> categorias = categoriaJpaController.findCategoriaEntities();
+        List<String> nomesCategorias = new ArrayList<>();
+
+        for (Categoria c : categorias) {
+            nomesCategorias.add(c.getNome());
         }
-        return itens;
+        return nomesCategorias;
     }
 
     public List<SelectItem> getSelectItemEstados() {
@@ -114,22 +119,43 @@ public class FornecedoresBean {
         return itens;
     }
 
+    public List<Categoria> getEntitiesCategoriaByNomes() {
+        List<Categoria> listaCategorias = new ArrayList<>();
+        Categoria categoraEncontrada;
+
+        for (String nome : categoriasSelecionadasNome) {
+            categoraEncontrada = categoriaJpaController.findCategoriaByNome(nome);
+            listaCategorias.add(categoraEncontrada);
+        }
+        return listaCategorias;
+
+    }
+
     public void onrate(RateEvent rateEvent) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Qualificação do Fornecedor", "Você qualificou:" + ((Integer) rateEvent.getRating()));
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Qualificação do Fornecedor", "Você atribuiu nota " + ((Integer) rateEvent.getRating()));
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public void oncancel() {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Qualificação do Fornecedor", "Qualificação resetada");
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Qualificação do Fornecedor", "Atribuição resetada");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public void salvar() throws Exception {
+        List<Categoria> listCategoria = new ArrayList<>(2);
+        Categoria c;
+        c = categoriaJpaController.findCategoria(1);
+        listCategoria.add(c);
+        c = categoriaJpaController.findCategoria(2);
+        listCategoria.add(c);
+        
+        fornecedor.setCategoriaCollection(listCategoria);
+
         if (cidadeSelecionada != 0) {
             Cidade cidade = cidadeJpaController.findCidade(cidadeSelecionada);
             fornecedor.getEnderecoId().setCidadeId(cidade);
-            
-            fornecedorJpaController.create(fornecedor);
         }
+
+        fornecedorJpaController.create(fornecedor);
     }
 }

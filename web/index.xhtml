@@ -77,15 +77,13 @@
 
                     <p:row>
                         <p:column>
-                            <p:selectCheckboxMenu id="categoria" filter="true" value="#{fornecedoresBean.categoriasSelecionadas}" label="Categorias" >
-                                <f:selectItems value="#{fornecedoresBean.listaCategorias}" />
+                            <p:selectCheckboxMenu id="categoria" filter="true" value="#{fornecedoresBean.categoriasSelecionadasNome}" label="Categorias" >
+                                <f:selectItems value="#{fornecedoresBean.categoriasNome}" var="categoria" itemLabel="#{categoria}" itemValue="#{categoria}" />
                                 <p:ajax event="change" update=":fornecedoresForm:categoriasSelecionadas"/>
                             </p:selectCheckboxMenu>
                         </p:column>
                         <p:column colspan="3">
-                            <p:autoComplete style="width: 100px" id="categoriasSelecionadas" readonly="true" multiple="true" value="#{fornecedoresBean.categoriasSelecionadas}" 
-                                            var="categ" itemLabel="#{categ}" itemValue="#{categ}">
-                            </p:autoComplete>
+                            <p:autoComplete id="categoriasSelecionadas" readonly="true" multiple="true"  value="#{fornecedoresBean.categoriasSelecionadasNome}" />
                         </p:column>
                         <p:column>
                             <p:outputLabel for="qualificacao" value="Qualificação" />
