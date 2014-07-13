@@ -2,6 +2,8 @@ package bean;
 
 import JPA.CategoriaJpaController;
 import JPA.CidadeJpaController;
+import JPA.ContatoJpaController;
+import JPA.EnderecoJpaController;
 import JPA.EstadoJpaController;
 import JPA.FornecedorJpaController;
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import model.Categoria;
 import model.Cidade;
+import model.Contato;
+import model.Endereco;
 import model.Estado;
 import model.Fornecedor;
 import org.primefaces.event.RateEvent;
@@ -21,7 +25,6 @@ import org.primefaces.event.RateEvent;
 @ManagedBean
 @ViewScoped
 public class FornecedoresBean {
-
     @EJB
     private EstadoJpaController estadoJpaController;
     @EJB
@@ -30,8 +33,16 @@ public class FornecedoresBean {
     private CategoriaJpaController categoriaJpaController;
     @EJB
     private FornecedorJpaController fornecedorJpaController;
-
+    @EJB
+    private EnderecoJpaController enderecoJpaController;
+    @EJB
+    private ContatoJpaController contatoJpaController;
+    
     private Fornecedor fornecedor = new Fornecedor();
+
+    private Endereco endereco = new Endereco();
+    
+    private Contato contato = new Contato();
 
     private int estadoSelecionado;
 
@@ -48,6 +59,22 @@ public class FornecedoresBean {
         this.fornecedor = fornecedor;
     }
 
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public Contato getContato() {
+        return contato;
+    }
+
+    public void setContato(Contato contato) {
+        this.contato = contato;
+    }
+    
     public int getEstadoSelecionado() {
         return estadoSelecionado;
     }
@@ -141,21 +168,22 @@ public class FornecedoresBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public void salvar() throws Exception {
-        List<Categoria> listCategoria = new ArrayList<>(2);
-        Categoria c;
-        c = categoriaJpaController.findCategoria(1);
-        listCategoria.add(c);
-        c = categoriaJpaController.findCategoria(2);
-        listCategoria.add(c);
-        
-        fornecedor.setCategoriaCollection(listCategoria);
-
-        if (cidadeSelecionada != 0) {
+    public void salvar() {
+        try {
             Cidade cidade = cidadeJpaController.findCidade(cidadeSelecionada);
-            fornecedor.getEnderecoId().setCidadeId(cidade);
+            endereco.setCidadeId(cidade);
+            enderecoJpaController.create(endereco);
+            fornecedor.setEnderecoId(endereco);
+            
+            contatoJpaController.create(contato);
+            fornecedor.setContatoCollection(new ArrayList<Contato>());
+            fornecedor.getContatoCollection().add(contato);
+            
+            fornecedorJpaController.create(fornecedor);
+
+        } catch (Exception e) {
+            System.out.println("Erro na persistência do fornecedor: " + e.getMessage());
         }
 
-        fornecedorJpaController.create(fornecedor);
     }
 }

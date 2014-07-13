@@ -134,16 +134,16 @@
                     </p:selectOneMenu>
                     
                     <p:outputLabel for="bairro" value="Bairro " />
-                    <p:inputText id="bairro" value="#{fornecedoresBean.fornecedor.enderecoId.bairro}" />
+                    <p:inputText id="bairro" value="#{fornecedoresBean.endereco.bairro}" />
 
                     <p:outputLabel for="logradouro" value="Logradouro " />
-                    <p:inputText id="logradouro" value="#{fornecedoresBean.fornecedor.enderecoId.logradouro}"/>
+                    <p:inputText id="logradouro" value="#{fornecedoresBean.endereco.logradouro}"/>
 
                     <p:outputLabel for="numero" value="Número " />
-                    <p:inputText id="numero" value="#{fornecedoresBean.fornecedor.enderecoId.numero}"/>
+                    <p:inputText id="numero" value="#{fornecedoresBean.endereco.numero}"/>
 
                     <p:outputLabel for="cep" value="CEP " />
-                    <p:inputMask id="cep" mask="99.999-999" value="#{fornecedoresBean.fornecedor.enderecoId.cep}"/>
+                    <p:inputMask id="cep" mask="99.999-999" value="#{fornecedoresBean.endereco.cep}"/>
                 </h:panelGrid>
             </p:panel>
 
@@ -152,16 +152,16 @@
             <p:panel header="Contato">
                 <h:panelGrid columns="4" cellpadding="5">
                     <p:outputLabel for="nome" value="Nome" />
-                    <p:inputText id="nome" />
+                    <p:inputText id="nome" value="#{fornecedoresBean.contato.nome}"/>
 
                     <p:outputLabel for="email" value="E-mail " />
-                    <p:inputText id="email" />
+                    <p:inputText id="email" value="#{fornecedoresBean.contato.email}"/>
 
                     <p:outputLabel for="telefone" value="Telefone " />
-                    <p:inputText id="telefone" />
+                    <p:inputText id="telefone" value="#{fornecedoresBean.contato.telefone}"/>
 
                     <p:outputLabel for="celular" value="Celular " />
-                    <p:inputText id="celular" />
+                    <p:inputText id="celular" value="#{fornecedoresBean.contato.celular}"/>
                 </h:panelGrid>
             </p:panel>
 
