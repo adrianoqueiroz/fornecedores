@@ -1,0 +1,162 @@
+<ui:composition template="/WEB-INF/facelets/template.xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="cabecalho">
+
+    </ui:define>
+
+    <ui:define name="conteudo">
+        <h:form id="fornecedoresForm"  acceptcharset="ISO-8859-1">
+            <p:growl id="messages" showDetail="true" />
+            <p:panel header="Identificação">
+                <p:panelGrid style="border: none !important;">
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="empresa" value="Nome Fantasia " />
+                        </p:column>
+                        <p:column colspan="3">
+                            <p:inputText id="empresa" size="65" value="#{fornecedoresBean.fornecedor.nomeFantasia}"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel for="responsavel" value="Responsável " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="responsavel" value="#{fornecedoresBean.fornecedor.responsavel}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="cnpj" value="CNPJ" />
+                        </p:column>
+                        <p:column>
+                            <p:inputMask id="cnpj" value="#{fornecedoresBean.fornecedor.cnpj}" mask="99.999.999/9999-99"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel for="inscEstadual" value="Insc. Estadual " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="inscEstadual" value="#{fornecedoresBean.fornecedor.inscEstadual}"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel for="inscMunicipal" value="Insc. Municipal " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="inscMunicipal" value="#{fornecedoresBean.fornecedor.inscMunicipal}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:selectCheckboxMenu id="categoria" filter="true" value="#{fornecedoresBean.categoriasSelecionadasString}" label="Categorias" >
+                                <f:selectItems value="#{fornecedoresBean.categorias}" var="categoria" itemLabel="#{categoria.nome}" itemValue="#{categoria.nome}" />
+                                <p:ajax event="change" update=":fornecedoresForm:categoriasSelecionadas"/>
+                            </p:selectCheckboxMenu>
+                        </p:column>
+                        <p:column colspan="3">
+                            <p:autoComplete id="categoriasSelecionadas" multiple="true"  value="#{fornecedoresBean.categoriasSelecionadasString}" />
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel for="qualificacao" value="Qualificação" />
+                        </p:column>
+                        <p:column>
+                            <p:rating id="qualificacao" value="#{fornecedoresBean.fornecedor.qualificacao}">
+                                <p:ajax event="rate" listener="#{fornecedoresBean.onrate}" update="messages" />
+                                <p:ajax event="cancel" listener="#{fornecedoresBean.oncancel}" update="messages" />
+                            </p:rating>     
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="observacao" value="Observações" />
+                        </p:column>
+                        <p:column colspan="3">
+                            <h:panelGrid>
+                                <p:inputTextarea id="observacao" value="#{fornecedoresBean.fornecedor.observacao}" rows="1" cols="61" counter="displayCounter" maxlength="150" counterTemplate="{0} Caracteres restantes."  autoResize="false" />
+                                <h:outputText id="displayCounter" />
+                            </h:panelGrid>
+                        </p:column>
+                        <p:column>
+
+                        </p:column>
+                        <p:column>
+
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </p:panel>
+
+            <br/>
+
+            <p:panel header="Endereço"> 
+                <h:panelGrid columns="6" cellpadding="5">
+                    <p:outputLabel for="estado" value="Estado" />
+                    <p:selectOneMenu id="estado" style="width:155px;" value="#{fornecedoresBean.estadoSelecionado}">
+                        <f:selectItem itemLabel="Selecione..."/>
+                        <f:selectItems value="#{fornecedoresBean.selectItemEstados}" />
+                        <p:ajax event="change" update=":fornecedoresForm:cidade"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="cidade" value="Cidade" />
+                    <p:selectOneMenu id="cidade" style="width:155px;" value="#{fornecedoresBean.cidadeSelecionada}" filter="true">
+                        <f:selectItem itemLabel="Selecione..."/>
+                        <f:selectItems value="#{fornecedoresBean.selectItemCidades}" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="bairro" value="Bairro " />
+                    <p:inputText id="bairro" value="#{fornecedoresBean.endereco.bairro}" />
+
+                    <p:outputLabel for="logradouro" value="Logradouro " />
+                    <p:inputText id="logradouro" value="#{fornecedoresBean.endereco.logradouro}"/>
+
+                    <p:outputLabel for="numero" value="Número " />
+                    <p:inputText id="numero" value="#{fornecedoresBean.endereco.numero}"/>
+
+                    <p:outputLabel for="cep" value="CEP " />
+                    <p:inputMask id="cep" mask="99.999-999" value="#{fornecedoresBean.endereco.cep}"/>
+                </h:panelGrid>
+            </p:panel>
+
+            <br/>
+
+            <p:panel header="Contato">
+                <h:panelGrid columns="4" cellpadding="5">
+                    <p:outputLabel for="nome" value="Nome" />
+                    <p:inputText id="nome" value="#{fornecedoresBean.contato.nome}"/>
+
+                    <p:outputLabel for="email" value="E-mail " />
+                    <p:inputText id="email" value="#{fornecedoresBean.contato.email}"/>
+
+                    <p:outputLabel for="telefone" value="Telefone " />
+                    <p:inputText id="telefone" value="#{fornecedoresBean.contato.telefone}"/>
+
+                    <p:outputLabel for="celular" value="Celular " />
+                    <p:inputText id="celular" value="#{fornecedoresBean.contato.celular}"/>
+                </h:panelGrid>
+            </p:panel>
+
+            <p:separator  />
+
+            <p:commandButton value="Limpar" type="reset" />
+            <p:commandButton ajax="false" value="Salvar" actionListener="#{fornecedoresBean.salvar()}"/>
+
+            <p:dialog widgetVar="dlg" modal="true" resizable="false" header="Values" showEffect="fade">
+                <p:panelGrid id="display" columns="2" columnClasses="label,value">
+                    <h:outputText value="Nome: " />
+                    <h:outputText id="nomeValue" value="#{fornecedoresBean.fornecedor.nomeFantasia}" />
+
+                    <h:outputText value="CNPJ: " />
+                    <h:outputText id="cnpjValue" value="#{fornecedoresBean.fornecedor.cnpj}" />
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="rodape">
+    </ui:define>
+</ui:composition>

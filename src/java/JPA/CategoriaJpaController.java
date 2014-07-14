@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package JPA;
 
 import JPA.exceptions.NonexistentEntityException;
@@ -31,12 +30,14 @@ import model.Fornecedor;
  */
 @Stateless
 public class CategoriaJpaController implements Serializable {
+
     @PersistenceUnit(unitName = "fornecedoresPU") //inject from your application server
     private EntityManagerFactory emf;
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
-    }   
-    
+    }
+
     public void create(Categoria categoria) throws RollbackFailureException, Exception {
         if (categoria.getFornecedorCollection() == null) {
             categoria.setFornecedorCollection(new ArrayList<Fornecedor>());
@@ -166,7 +167,7 @@ public class CategoriaJpaController implements Serializable {
         }
     }
 
-        public Categoria findCategoriaByNome(String nome) {
+    public Categoria findCategoriaByNome(String nome) {
         EntityManager em = getEntityManager();
         try {
             TypedQuery<Categoria> query = em.createQuery("select c from Categoria c where c.nome = :nome", Categoria.class);
@@ -176,7 +177,22 @@ public class CategoriaJpaController implements Serializable {
             em.close();
         }
     }
-        
+
+    public List<Categoria> findCategoriasByNomes(List<String> nomes) {
+        EntityManager em = getEntityManager();
+        List<Categoria> list = new ArrayList<>(nomes.size());
+        try {
+            TypedQuery<Categoria> query = em.createQuery("select c from Categoria c where c.nome = :nome", Categoria.class);
+            for (String nome : nomes) {
+                query.setParameter("nome", nome);
+                list.add((Categoria) query.getSingleResult());
+            }
+        } finally {
+            em.close();
+        }
+        return list;
+    }
+
     public int getCategoriaCount() {
         EntityManager em = getEntityManager();
         try {
@@ -189,5 +205,5 @@ public class CategoriaJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

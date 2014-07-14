@@ -25,6 +25,7 @@ import org.primefaces.event.RateEvent;
 @ManagedBean
 @ViewScoped
 public class FornecedoresBean {
+
     @EJB
     private EstadoJpaController estadoJpaController;
     @EJB
@@ -37,19 +38,18 @@ public class FornecedoresBean {
     private EnderecoJpaController enderecoJpaController;
     @EJB
     private ContatoJpaController contatoJpaController;
-    
+
     private Fornecedor fornecedor = new Fornecedor();
 
     private Endereco endereco = new Endereco();
-    
+
     private Contato contato = new Contato();
 
     private int estadoSelecionado;
 
     private int cidadeSelecionada;
 
-    private List<String> categoriasNome;
-    private List<String> categoriasSelecionadasNome;
+    private List<String> categoriasSelecionadasString = new ArrayList<>();
 
     public Fornecedor getFornecedor() {
         return fornecedor;
@@ -74,7 +74,7 @@ public class FornecedoresBean {
     public void setContato(Contato contato) {
         this.contato = contato;
     }
-    
+
     public int getEstadoSelecionado() {
         return estadoSelecionado;
     }
@@ -91,36 +91,16 @@ public class FornecedoresBean {
         this.cidadeSelecionada = cidadeSelecionada;
     }
 
-    public List<String> getCategoriasSelecionadasNome() {
-        return categoriasSelecionadasNome;
+    public List<String> getCategoriasSelecionadasString() {
+        return categoriasSelecionadasString;
     }
 
-    public void setCategoriasSelecionadasNome(List<String> categoriasSelecionadasNome) {
-        this.categoriasSelecionadasNome = categoriasSelecionadasNome;
+    public void setCategoriasSelecionadasString(List<String> categoriasSelecionadasString) {
+        this.categoriasSelecionadasString = categoriasSelecionadasString;
     }
 
-    public List<String> getCategoriasNome() {
-        List<Categoria> categorias = categoriaJpaController.findCategoriaEntities();
-        categoriasNome = new ArrayList<>(categorias.size());
-        for (Categoria c : categorias) {
-            categoriasNome.add(c.getNome());
-        }
-
-        return categoriasNome;
-    }
-
-    public void setCategoriasNome(List<String> categoriasNome) {
-        this.categoriasNome = categoriasNome;
-    }
-
-    public List<String> getListaCategoriasNome() {
-        List<Categoria> categorias = categoriaJpaController.findCategoriaEntities();
-        List<String> nomesCategorias = new ArrayList<>();
-
-        for (Categoria c : categorias) {
-            nomesCategorias.add(c.getNome());
-        }
-        return nomesCategorias;
+    public List<Categoria> getCategorias() {
+        return categoriaJpaController.findCategoriaEntities();
     }
 
     public List<SelectItem> getSelectItemEstados() {
@@ -129,7 +109,7 @@ public class FornecedoresBean {
         List<SelectItem> itens = new ArrayList<>(listaEstados.size());
 
         for (Estado e : listaEstados) {
-            itens.add(new SelectItem(e.getId(), e.getSigla()));
+            itens.add(new SelectItem(e.getId(), e.getNome()));
 
         }
         return itens;
@@ -146,18 +126,6 @@ public class FornecedoresBean {
         return itens;
     }
 
-    public List<Categoria> getEntitiesCategoriaByNomes() {
-        List<Categoria> listaCategorias = new ArrayList<>();
-        Categoria categoraEncontrada;
-
-        for (String nome : categoriasSelecionadasNome) {
-            categoraEncontrada = categoriaJpaController.findCategoriaByNome(nome);
-            listaCategorias.add(categoraEncontrada);
-        }
-        return listaCategorias;
-
-    }
-
     public void onrate(RateEvent rateEvent) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Qualificação do Fornecedor", "Você atribuiu nota " + ((Integer) rateEvent.getRating()));
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -170,15 +138,18 @@ public class FornecedoresBean {
 
     public void salvar() {
         try {
+            List<Categoria> categoriasSelecionadas = categoriaJpaController.findCategoriasByNomes(categoriasSelecionadasString);
+            fornecedor.setCategoriaCollection(categoriasSelecionadas);
+            
             Cidade cidade = cidadeJpaController.findCidade(cidadeSelecionada);
             endereco.setCidadeId(cidade);
             enderecoJpaController.create(endereco);
             fornecedor.setEnderecoId(endereco);
-            
+
             contatoJpaController.create(contato);
             fornecedor.setContatoCollection(new ArrayList<Contato>());
             fornecedor.getContatoCollection().add(contato);
-            
+
             fornecedorJpaController.create(fornecedor);
 
         } catch (Exception e) {

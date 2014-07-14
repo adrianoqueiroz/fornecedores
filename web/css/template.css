@@ -1,0 +1,88 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 13/07/2014, 20:45:45
+    Author     : Adriano
+*/
+
+//não mostrar a opção de marcar todos os itens no checkboxmenu
+.ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header .ui-chkbox-box{
+    display: none;
+}
+
+.ui-widget {
+    font-size: 12px !important;
+    margin: 0;
+} 
+.semBorda tr, semBorda td{  
+    border: none !important;   
+}
+
+html, body { 
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}  
+
+root { 
+    display: block; 
+}
+
+#div_logo {
+    width:960px;
+    margin:auto;
+    display: block;
+}
+
+#div_menu{
+    width:960px;
+    margin:auto;
+    display: block;   
+}
+
+#div_central {
+    background-color:white;
+    width:960px;
+    min-height: 450px;
+    margin:auto;
+    border-radius:3px;
+    box-shadow: 0px 0px 7px #585858;
+
+}
+
+#div_conteudo{
+   width: 920px;
+   margin: auto;
+}
+footer {
+    width: 99%;
+}
+
+footer div{
+    width: 100%; 
+    max-width: 960px;
+    bottom: 0;
+    margin:auto;
+    text-align: center;
+}
+
+footer img{
+    margin: auto 0;
+}
+
+/*classe para auxiliar no cancelamento de float*/
+.clearFull{
+    display:block;
+    clear:both;
+}
+
+/*classe para auxiliar no espacamento*/
+.div10{ height: 10px; }
+.div20{ height: 20px; }
+.div80{ height: 80px; }
+
+
