@@ -1,0 +1,50 @@
+<ui:composition template="/WEB-INF/facelets/template.xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="cabecalho">
+    </ui:define>
+
+    <ui:define name="conteudo">
+        <h:form>
+            <p:dataTable id="tbl" var="fornecedor" value="#{listaBean.listaFornecedores}"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                         paginator="true" rows="10" style="margin-bottom:20px">
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="CNPJ" />
+                    </f:facet>
+                    <h:outputText value="#{fornecedor.cnpj}" />
+                </p:column>
+                
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Nome Fantasia" />
+                    </f:facet>
+                    <h:outputText value="#{fornecedor.nomeFantasia}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Qualificação"/>
+                    </f:facet>
+                    <h:outputText value="#{fornecedor.qualificacao}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Responsável" />
+                    </f:facet>
+                    <h:outputText value="#{fornecedor.responsavel}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+    </ui:define>
+
+    <ui:define name="rodape">
+    </ui:define>
+</ui:composition>
