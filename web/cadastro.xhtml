@@ -13,16 +13,16 @@
         <h:form id="fornecedoresForm"  acceptcharset="ISO-8859-1">
             <p:growl id="messages" showDetail="true" />
             <p:panel header="Identificação">
-                <p:panelGrid style="border: none !important;">
+                <p:panelGrid>
                     <p:row>
                         <p:column>
-                            <p:outputLabel for="empresa" value="Nome Fantasia " />
+                            <p:outputLabel for="empresa" value="Nome Fantasia" />
                         </p:column>
                         <p:column colspan="3">
-                            <p:inputText id="empresa" size="64" value="#{fornecedoresBean.fornecedor.nomeFantasia}"/>
+                            <p:inputText id="empresa" size="64" value="#{fornecedoresBean.fornecedor.nomeFantasia}" required="true"/>
                         </p:column>
                         <p:column>
-                            <p:outputLabel for="responsavel" value="Responsável " />
+                            <p:outputLabel for="responsavel" value="Responsável" />
                         </p:column>
                         <p:column>
                             <p:inputText id="responsavel" value="#{fornecedoresBean.fornecedor.responsavel}"/>
@@ -37,13 +37,13 @@
                             <p:inputMask id="cnpj" value="#{fornecedoresBean.fornecedor.cnpj}" mask="99.999.999/9999-99"/>
                         </p:column>
                         <p:column>
-                            <p:outputLabel for="inscEstadual" value="Insc. Estadual " />
+                            <p:outputLabel for="inscEstadual" value="Insc. Estadual" />
                         </p:column>
                         <p:column>
                             <p:inputText id="inscEstadual" value="#{fornecedoresBean.fornecedor.inscEstadual}"/>
                         </p:column>
                         <p:column>
-                            <p:outputLabel for="inscMunicipal" value="Insc. Municipal " />
+                            <p:outputLabel for="inscMunicipal" value="Insc. Municipal" />
                         </p:column>
                         <p:column>
                             <p:inputText id="inscMunicipal" value="#{fornecedoresBean.fornecedor.inscMunicipal}"/>
@@ -94,45 +94,50 @@
             <br/>
 
             <p:panel header="Endereço"> 
-                <h:panelGrid columns="6" cellpadding="5">
+                <h:panelGrid columns="8" cellpadding="5">
                     <p:outputLabel for="estado" value="Estado" />
-                    <p:selectOneMenu id="estado" style="width:155px;" value="#{fornecedoresBean.estadoSelecionado}">
+                    <p:selectOneMenu id="estado" style="width:155px;" value="#{fornecedoresBean.estadoSelecionado}" required="true">
                         <f:selectItem itemLabel="Selecione..."/>
                         <f:selectItems value="#{fornecedoresBean.selectItemEstados}" />
                         <p:ajax event="change" update=":fornecedoresForm:cidade"/>
                     </p:selectOneMenu>
 
                     <p:outputLabel for="cidade" value="Cidade" />
-                    <p:selectOneMenu id="cidade" style="width:155px;" value="#{fornecedoresBean.cidadeSelecionada}" filter="true">
+                    <p:selectOneMenu id="cidade" style="width:155px;" value="#{fornecedoresBean.cidadeSelecionada}" filter="true" required="true">
                         <f:selectItem itemLabel="Selecione..."/>
                         <f:selectItems value="#{fornecedoresBean.selectItemCidades}" />
                     </p:selectOneMenu>
 
-                    <p:outputLabel for="bairro" value="Bairro " />
+                    <p:outputLabel for="bairro" value="Bairro" />
                     <p:inputText id="bairro" value="#{fornecedoresBean.endereco.bairro}" />
 
-                    <p:outputLabel for="logradouro" value="Logradouro " />
-                    <p:inputText id="logradouro" value="#{fornecedoresBean.endereco.logradouro}"/>
+                    <p:outputLabel for="cep" value="CEP" />
+                    <p:inputMask id="cep" mask="99.999-999" value="#{fornecedoresBean.endereco.cep}"/>
 
-                    <p:outputLabel for="numero" value="Número " />
+                    <p:outputLabel for="logradouro" value="End." />
+                    <p:inputText id="logradouro" value="#{fornecedoresBean.endereco.logradouro}" required="true"/>
+
+                    <p:outputLabel for="complemento" value="Comp." />
+                    <p:inputText id="complemento"/>
+
+                    <p:outputLabel for="numero" value="Nº" />
                     <p:inputText id="numero" value="#{fornecedoresBean.endereco.numero}"/>
 
-                    <p:outputLabel for="cep" value="CEP " />
-                    <p:inputMask id="cep" mask="99.999-999" value="#{fornecedoresBean.endereco.cep}"/>
+
                 </h:panelGrid>
             </p:panel>
 
             <br/>
 
             <p:panel header="Contato">
-                <h:panelGrid columns="4" cellpadding="5">
+                <h:panelGrid columns="8" cellpadding="5">
                     <p:outputLabel for="nome" value="Nome" />
                     <p:inputText id="nome" value="#{fornecedoresBean.contato.nome}"/>
 
-                    <p:outputLabel for="email" value="E-mail " />
+                    <p:outputLabel for="email" value="E-mail" />
                     <p:inputText id="email" value="#{fornecedoresBean.contato.email}"/>
 
-                    <p:outputLabel for="telefone" value="Telefone " />
+                    <p:outputLabel for="telefone" value="Telefone" />
                     <p:inputText id="telefone" value="#{fornecedoresBean.contato.telefone}"/>
 
                     <p:outputLabel for="celular" value="Celular " />
@@ -140,7 +145,27 @@
                 </h:panelGrid>
             </p:panel>
 
+            <br/>
+
+            <p:panel header="Contato Alternativo">
+                <h:panelGrid columns="8" cellpadding="5">
+                    <p:outputLabel for="nomeAlternativo" value="Nome" />
+                    <p:inputText id="nomeAlternativo" value="#{fornecedoresBean.contatoAlternativo.nome}"/>
+
+                    <p:outputLabel for="emailAlternativo" value="E-mail" />
+                    <p:inputText id="emailAlternativo" value="#{fornecedoresBean.contatoAlternativo.email}"/>
+
+                    <p:outputLabel for="telefoneAlternativo" value="Telefone" />
+                    <p:inputText id="telefoneAlternativo" value="#{fornecedoresBean.contatoAlternativo.telefone}"/>
+
+                    <p:outputLabel for="celularAlternativo" value="Celular" />
+                    <p:inputText id="celularAlternativo" value="#{fornecedoresBean.contatoAlternativo.celular}"/>
+                </h:panelGrid>
+            </p:panel>
+
+            <span class="clearFull div10"></span>
             <p:separator  />
+            <span class="clearFull div10"></span>
 
             <p:commandButton value="Limpar" type="reset" />
             <p:commandButton ajax="false" value="Salvar" actionListener="#{fornecedoresBean.salvar()}"/>

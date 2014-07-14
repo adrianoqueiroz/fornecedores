@@ -45,6 +45,8 @@ public class FornecedoresBean {
 
     private Contato contato = new Contato();
 
+    private Contato contatoAlternativo = new Contato();
+
     private int estadoSelecionado;
 
     private int cidadeSelecionada;
@@ -73,6 +75,14 @@ public class FornecedoresBean {
 
     public void setContato(Contato contato) {
         this.contato = contato;
+    }
+
+    public Contato getContatoAlternativo() {
+        return contatoAlternativo;
+    }
+
+    public void setContatoAlternativo(Contato contatoAlternativo) {
+        this.contatoAlternativo = contatoAlternativo;
     }
 
     public int getEstadoSelecionado() {
@@ -140,7 +150,7 @@ public class FornecedoresBean {
         try {
             List<Categoria> categoriasSelecionadas = categoriaJpaController.findCategoriasByNomes(categoriasSelecionadasString);
             fornecedor.setCategoriaCollection(categoriasSelecionadas);
-            
+
             Cidade cidade = cidadeJpaController.findCidade(cidadeSelecionada);
             endereco.setCidadeId(cidade);
             enderecoJpaController.create(endereco);
@@ -149,6 +159,7 @@ public class FornecedoresBean {
             contatoJpaController.create(contato);
             fornecedor.setContatoCollection(new ArrayList<Contato>());
             fornecedor.getContatoCollection().add(contato);
+            fornecedor.getContatoCollection().add(contatoAlternativo);
 
             fornecedorJpaController.create(fornecedor);
 
