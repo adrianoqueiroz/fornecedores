@@ -5,10 +5,13 @@
     <class>model.Categoria</class>
     <class>model.Cidade</class>
     <class>model.Contato</class>
+    <class>model.Endereco</class>
     <class>model.Estado</class>
     <class>model.Fornecedor</class>
     <class>model.Usuario</class>
-    <exclude-unlisted-classes>true</exclude-unlisted-classes>
-    <properties/>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+    </properties>
   </persistence-unit>
 </persistence>
