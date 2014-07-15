@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package JPA;
 
 import JPA.exceptions.IllegalOrphanException;
@@ -23,6 +22,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 import model.Categoria;
+import model.Cidade;
 import model.Contato;
 import model.Endereco;
 import model.Fornecedor;
@@ -33,11 +33,13 @@ import model.Fornecedor;
  */
 @Stateless
 public class FornecedorJpaController implements Serializable {
+
     @PersistenceUnit(unitName = "fornecedoresPU") //inject from your application server
     private EntityManagerFactory emf;
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
-    }  
+    }
 
     public void create(Fornecedor fornecedor) throws RollbackFailureException, Exception {
         if (fornecedor.getCategoriaCollection() == null) {
@@ -257,6 +259,17 @@ public class FornecedorJpaController implements Serializable {
         }
     }
 
+    public List<Fornecedor> findFornecedorByQualificacao(int qualificacao) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("select f from Fornecedor f where f.qualificacao = :qualificacao", Fornecedor.class);
+            query.setParameter("qualificacao", qualificacao);
+            return new ArrayList<>(query.getResultList());
+        } finally {
+            em.close();
+        }
+    }
+
     public int getFornecedorCount() {
         EntityManager em = getEntityManager();
         try {
@@ -269,5 +282,5 @@ public class FornecedorJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

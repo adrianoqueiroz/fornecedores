@@ -157,6 +157,7 @@ public class FornecedoresBean {
             fornecedor.setEnderecoId(endereco);
 
             contatoJpaController.create(contato);
+            contatoJpaController.create(contatoAlternativo);
             fornecedor.setContatoCollection(new ArrayList<Contato>());
             fornecedor.getContatoCollection().add(contato);
             fornecedor.getContatoCollection().add(contatoAlternativo);

@@ -214,11 +214,11 @@ public class CidadeJpaController implements Serializable {
         }
     }
 
-    public List<Cidade> findCidadeByEstado(int id) {
+    public List<Cidade> findCidadeByEstado(int idEstado) {
         EntityManager em = getEntityManager();
         try {
             Query query = em.createQuery("select c from Cidade c where c.estadoId.id = :id", Cidade.class);
-            query.setParameter("id", id);
+            query.setParameter("id", idEstado);
             return new ArrayList<>(query.getResultList());
         } finally {
             em.close();
