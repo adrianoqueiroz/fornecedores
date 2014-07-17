@@ -12,12 +12,14 @@
 
         <span class="clearFull div20"/>
         <span class="clearFull div10"/>
-        
+
+        <p:growl id="messages" showDetail="true" />
+
         <h:panelGrid columns="2">
             <h:panelGrid>
                 <p>Seja bem-vindo ao Sistema de Controle de Fornecedores do Parque Social.</p>
                 <p>Antes de iniciar o cadastro de um novo fornecedor, consulte através do CNPJ para verificar se o mesmo já foi registrado anteriormente.</p>
-                
+
             </h:panelGrid>
 
             <p:chart type="pie" model="#{chartFornecedoresBean.pie}" style="width:400px;height:300px" />

@@ -13,13 +13,14 @@
             <p:dataTable id="tbl" var="fornecedor" value="#{listaBean.listaFornecedores}"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                          paginator="true" rows="10" style="margin-bottom:20px">
+
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="CNPJ" />
                     </f:facet>
                     <h:outputText value="#{fornecedor.cnpj}" />
                 </p:column>
-                
+
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="Nome Fantasia" />
@@ -32,6 +33,15 @@
                         <h:outputText value="Qualificação"/>
                     </f:facet>
                     <h:outputText value="#{fornecedor.qualificacao}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Categoria"/>
+                    </f:facet>
+                    <ui:repeat var="categoria" value="#{fornecedor.categoriaCollection}">
+                        <h:outputText value="#{categoria.nome}" /><br />
+                    </ui:repeat>
                 </p:column>
 
                 <p:column>

@@ -146,7 +146,7 @@ public class FornecedoresBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public void salvar() {
+    public String salvar() {
         try {
             List<Categoria> categoriasSelecionadas = categoriaJpaController.findCategoriasByNomes(categoriasSelecionadasString);
             fornecedor.setCategoriaCollection(categoriasSelecionadas);
@@ -164,8 +164,17 @@ public class FornecedoresBean {
 
             fornecedorJpaController.create(fornecedor);
 
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cadastro de Fornecedor", "Dados gravados com sucesso!");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+            return "index.xhtml?faces-redirect=true";
+
         } catch (Exception e) {
             System.out.println("Erro na persistência do fornecedor: " + e.getMessage());
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cadastro de Fornecedor", "Erro na gravação dos dados!");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+            return "erro.xhtml?faces-redirect=true";
         }
 
     }

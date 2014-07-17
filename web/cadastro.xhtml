@@ -52,13 +52,13 @@
 
                     <p:row>
                         <p:column>
-                            <p:selectCheckboxMenu id="categoria" filter="true" value="#{fornecedoresBean.categoriasSelecionadasString}" label="Categorias" >
+                            <p:selectCheckboxMenu id="categoria" filter="true" value="#{fornecedoresBean.categoriasSelecionadasString}" label="Categorias" required="true" >
                                 <f:selectItems value="#{fornecedoresBean.categorias}" var="categoria" itemLabel="#{categoria.nome}" itemValue="#{categoria.nome}" />
                                 <p:ajax event="change" update=":fornecedoresForm:categoriasSelecionadas"/>
                             </p:selectCheckboxMenu>
                         </p:column>
                         <p:column colspan="3">
-                            <p:autoComplete id="categoriasSelecionadas" multiple="true"  value="#{fornecedoresBean.categoriasSelecionadasString}" />
+                            <p:autoComplete id="categoriasSelecionadas" forceSelection="true" multiple="true"  value="#{fornecedoresBean.categoriasSelecionadasString}" />
                         </p:column>
                         <p:column>
                             <p:outputLabel for="qualificacao" value="Qualificação" />
@@ -168,7 +168,7 @@
             <span class="clearFull div20"></span>
 
             <p:commandButton value="Limpar" type="reset" />
-            <p:commandButton ajax="false" value="Salvar" actionListener="#{fornecedoresBean.salvar()}"/>
+            <p:commandButton ajax="false" value="Salvar" actionListener="#{fornecedoresBean.salvar()}" action="index.xhtml?faces-redirect=true"/>
 
             <p:dialog widgetVar="dlg" modal="true" resizable="false" header="Values" showEffect="fade">
                 <p:panelGrid id="display" columns="2" columnClasses="label,value">

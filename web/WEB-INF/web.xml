@@ -26,4 +26,9 @@
         <param-name>primefaces.THEME</param-name>  
         <param-value>home</param-value>  
     </context-param>  
+    
+    <error-page>
+        <error-code>500</error-code>
+        <location>/erro.xhtml</location>
+    </error-page>
 </web-app>
