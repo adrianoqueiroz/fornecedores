@@ -1,26 +1,70 @@
-<ui:composition template="/WEB-INF/facelets/template.xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core">
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Sistema de Controle de Fornecedores</title>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/css/template.css"/>
 
-    <ui:define name="cabecalho">
-    </ui:define>
+        <style>
+            #ops {
+                font-family: Georgia; 
+                color: #585858; 
+                font-size: 65px;
+            }
+            #img_erro{
+                width:256px; 
+                height: 256px;
+            }
+            #panelErro p{
+                font-family: Georgia; 
+                color: #585858; 
+            }
+            /*classe para auxiliar no cancelamento de float*/
+            .clearFull{
+                display:block;
+                clear:both;
+            }
 
-    <ui:define name="conteudo">
+            /*classe para auxiliar no espacamento*/
+            .div10{ height: 10px; }
+            .div20{ height: 20px; }
+            .div40{ height: 40px; }
+            .div80{ height: 80px; }
+        </style>
+        <ui:insert name="cabecalho" />
+    </h:head>
 
-        <span class="clearFull div20"/>
-        <span class="clearFull div10"/>
-        
-        <h:panelGrid columns="2">
-            <h:panelGrid>
-                <p> Erro :(</p>
+    <body style="background-image:url('imagens/bg_site.jpg'); background-repeat: repeat-x;">
+        <center>
+            <div id="panelErro">
+                <center>
+                    <span class="clearFull div20"></span>
+                    
+                    <span id="ops">Oops!</span>
+
+                    <span class="clearFull div20"></span>
+
+                    <img id="img_erro" src="imagens/erro.png"/>
+                    
+                    <span class="clearFull div10"></span>
+                    
+                    <p> A Página que você está procurando não existe ou um outro erro ocorreu.</p>
+                    <p>Acesse a <a href="index.xhtml">página inicial.</a></p>
+                </center>
+            </div>
+        </center>
+
+        <footer>
+            <div id="footer_copyright">
+                <span class="clearFull div20"></span>
                 
-            </h:panelGrid>
-       </h:panelGrid>
-    </ui:define>
-
-    <ui:define name="rodape">
-    </ui:define>
-</ui:composition>
+                <img alt="logops" id="logops" src="imagens/logo-ps.png"/>
+                <img alt="logoti" id="logoti" src="imagens/logoti.png"/>
+            </div>  
+        </footer>
+    </body>
+</html>

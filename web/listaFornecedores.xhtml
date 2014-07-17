@@ -13,43 +13,61 @@
             <p:dataTable id="tbl" var="fornecedor" value="#{listaBean.listaFornecedores}"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                          paginator="true" rows="10" style="margin-bottom:20px">
+                <center>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="CNPJ" />
+                        </f:facet>
+                        <h:outputText value="#{fornecedor.cnpj}" />
+                    </p:column>
 
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="CNPJ" />
-                    </f:facet>
-                    <h:outputText value="#{fornecedor.cnpj}" />
-                </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nome Fantasia" />
+                        </f:facet>
+                        <h:outputText value="#{fornecedor.nomeFantasia}" />
+                    </p:column>
 
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="Nome Fantasia" />
-                    </f:facet>
-                    <h:outputText value="#{fornecedor.nomeFantasia}" />
-                </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Categoria"/>
+                        </f:facet>
+                        <ui:repeat var="categoria" value="#{fornecedor.categoriaCollection}">
+                            <h:outputText value="#{categoria.nome}" /><br />
+                        </ui:repeat>
+                    </p:column>
 
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="Qualificação"/>
-                    </f:facet>
-                    <h:outputText value="#{fornecedor.qualificacao}" />
-                </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Responsável" />
+                        </f:facet>
+                        <h:outputText value="#{fornecedor.responsavel}" />
+                    </p:column>
 
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="Categoria"/>
-                    </f:facet>
-                    <ui:repeat var="categoria" value="#{fornecedor.categoriaCollection}">
-                        <h:outputText value="#{categoria.nome}" /><br />
-                    </ui:repeat>
-                </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Cidade" />
 
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="Responsável" />
-                    </f:facet>
-                    <h:outputText value="#{fornecedor.responsavel}" />
-                </p:column>
+                        </f:facet>
+                        <h:outputText value="#{fornecedor.enderecoId.cidadeId.nome}" />
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Telefone" />
+                        </f:facet>
+                        <ui:repeat var="contato" value="#{fornecedor.contatoCollection}">
+                            <h:outputText value="#{contato.telefone}" /><br />
+                        </ui:repeat>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Qualificação"/>
+                        </f:facet>
+                        <h:outputText value="#{fornecedor.qualificacao} Estrela(s)" />
+                    </p:column>
+                </center>
             </p:dataTable>
         </h:form>
 

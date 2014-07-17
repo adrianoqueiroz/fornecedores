@@ -167,18 +167,18 @@
             <p:separator  />
             <span class="clearFull div20"></span>
 
-            <p:commandButton value="Limpar" type="reset" />
+            <p:commandButton value="Limpar" type="reset" >
+                
+            </p:commandButton>
             <p:commandButton ajax="false" value="Salvar" actionListener="#{fornecedoresBean.salvar()}" action="index.xhtml?faces-redirect=true"/>
 
-            <p:dialog widgetVar="dlg" modal="true" resizable="false" header="Values" showEffect="fade">
-                <p:panelGrid id="display" columns="2" columnClasses="label,value">
-                    <h:outputText value="Nome: " />
-                    <h:outputText id="nomeValue" value="#{fornecedoresBean.fornecedor.nomeFantasia}" />
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
 
-                    <h:outputText value="CNPJ: " />
-                    <h:outputText id="cnpjValue" value="#{fornecedoresBean.fornecedor.cnpj}" />
-                </p:panelGrid>
-            </p:dialog>
+            <p:commandButton ajax="false" value="Salvar" actionListener="#{fornecedoresBean.salvar()}" action="index.xhtml?faces-redirect=true"/>
+
         </h:form>
     </ui:define>
 
