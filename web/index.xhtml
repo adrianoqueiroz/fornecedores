@@ -11,18 +11,21 @@
     <ui:define name="conteudo">
 
         <span class="clearFull div20"/>
+
         <span class="clearFull div10"/>
 
         <p:growl id="messages" showDetail="true" />
 
         <h:panelGrid columns="2">
-            <h:panelGrid>
-                <p>Seja bem-vindo ao Sistema de Controle de Fornecedores do Parque Social.</p>
-                <p>Antes de iniciar o cadastro de um novo fornecedor, consulte através do CNPJ para verificar se o mesmo já foi registrado anteriormente.</p>
-
+            <h:panelGrid style="font-family: Georgia; color: #585858; font-size: 13px">
+                <p style="font-size: 14px"><b>Bem-vindo ao Sistema de Controle de Fornecedores do Parque Social</b></p>
+                <br/>
+                <p>Antes de iniciar o cadastro de um <b>Novo Fornecedor</b>, consulte através do CNPJ se certificar de que o mesmo não foi registrado anteriormente. Caso haja outro registro com o mesmo CNJP, a operação não será concluída.</p>
+                <p>Durante o processo de registro de fornecedor, é obrigatória a seleção de no mínimo uma categoria.</p>
+                <p>Uma <b>Nova Categoria</b> pode ser cadastrada a qualquer momento através do botão localizado no menu principal.</p>
             </h:panelGrid>
 
-            <p:chart type="pie" model="#{chartFornecedoresBean.pie}" style="width:400px;height:300px" />
+            <p:chart type="pie" model="#{chartFornecedoresBean.pie}" style="width:400px;height:300px"/>
         </h:panelGrid>
     </ui:define>
 

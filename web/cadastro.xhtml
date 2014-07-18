@@ -121,7 +121,9 @@
                     <p:inputText id="complemento"/>
 
                     <p:outputLabel for="numero" value="Nº" />
-                    <p:inputText id="numero" value="#{fornecedoresBean.endereco.numero}"/>
+                    <p:inputText id="numero" value="#{fornecedoresBean.endereco.numero}"> 
+                        <f:validateDoubleRange minimum="1" maximum="9999" />
+                    </p:inputText>
 
 
                 </h:panelGrid>
@@ -168,15 +170,13 @@
             <span class="clearFull div20"></span>
 
             <p:commandButton value="Limpar" type="reset" >
-                
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
             </p:commandButton>
-            <p:commandButton ajax="false" value="Salvar" actionListener="#{fornecedoresBean.salvar()}" action="index.xhtml?faces-redirect=true"/>
 
-            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
-                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-            </p:confirmDialog>
-
+            <p:spacer width="5" />
             <p:commandButton ajax="false" value="Salvar" actionListener="#{fornecedoresBean.salvar()}" action="index.xhtml?faces-redirect=true"/>
 
         </h:form>
