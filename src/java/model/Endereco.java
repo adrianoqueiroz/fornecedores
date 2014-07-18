@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package model;
 
 import java.io.Serializable;
@@ -41,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Endereco.findByNumero", query = "SELECT e FROM Endereco e WHERE e.numero = :numero"),
     @NamedQuery(name = "Endereco.findByCep", query = "SELECT e FROM Endereco e WHERE e.cep = :cep")})
 public class Endereco implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -52,6 +52,9 @@ public class Endereco implements Serializable {
     @Size(max = 45)
     @Column(name = "logradouro")
     private String logradouro;
+    @Size(max = 45)
+    @Column(name = "complemento")
+    private String complemento;
     @Column(name = "numero")
     private Integer numero;
     @Size(max = 11)
@@ -92,6 +95,14 @@ public class Endereco implements Serializable {
 
     public void setLogradouro(String logradouro) {
         this.logradouro = logradouro;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
     }
 
     public Integer getNumero() {
@@ -151,5 +162,5 @@ public class Endereco implements Serializable {
     public String toString() {
         return "model.Endereco[ id=" + id + " ]";
     }
-    
+
 }
