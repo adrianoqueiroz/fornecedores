@@ -13,6 +13,18 @@
             <p:dataTable id="tbl" var="fornecedor" value="#{listaBean.listaFornecedores}"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                          paginator="true" rows="10" style="margin-bottom:20px">
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage name="imagens/excel.png" width="24"/>
+                        <p:dataExporter type="xls" target="tbl" fileName="cars" />
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage name="imagens/pdf.png" width="24"/>
+                        <p:dataExporter type="pdf" target="tbl" fileName="cars"/>
+                    </h:commandLink>
+                </f:facet>
+
                 <center>
                     <p:column>
                         <f:facet name="header">
